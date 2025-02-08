@@ -135,7 +135,7 @@ function enviarNotificacao(nomeConta, dataVencimento) {
     if (Notification.permission === "granted") {
         new Notification("Lembrete de Pagamento", {
             body: `A conta "${nomeConta}" vence em 2 dias (${dataVencimento}).`,
-            icon: "img/SITE ICON.png"
+            icon: "img/icon.png"
         });
     }
 }
