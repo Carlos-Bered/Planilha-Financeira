@@ -33,36 +33,25 @@
                     <label for="valor">Valor:</label>
                     <input type="number" id="valor" required>
 
+                    <label for="parcelamento">Parcelas:</label>
+                    <input type="number" id="parcelamento" min="1" value="1">
                 </div>
-
                 <button type="submit" class="salvar-modal">Salvar</button>
             </form>
         </div>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Nome da Conta</th>
-                <th>Data de Vencimento</th>
-                <th>Valor</th>
-                <th>Comprovante</th>
-                <th>Pago?</th>
-            </tr>
-        </thead>
-        <tbody id="listaContas">
-            
-        </tbody>
-    </table>
+    <div id="listaContasMobile" class="lista-contas-mobile"></div>
 
-<footer>
-    <p class="footer__autor"> &copy;Carlos Eduardo Martins Saldanha</p>
-    <div class="footer__logos">
-        <a class="footer__link" href="https://www.instagram.com/carlos_bered?igsh=MThwc2Jwa2VrcDBjdQ%3D%3D&utm_source=qr" target="_blank"><img class="logo" src="img/instagram.png" alt="instagram Logo"></a>
-        <a class="footer__link" href="https://br.linkedin.com/in/carlos-eduardo-martins-saldanha-652205323" target="_blank"><img class="logo" src="img/linkedin.png" alt="linkedin logo"></a>
-        <a class="footer__link" href="https://github.com/Carlos-Bered" target="_blank"><img class="logo" src="img/github.png" alt="github logo"></a>
-    </div>
-</footer>
+    <footer>
+        <p class="footer__autor"> &copy;Carlos Eduardo Martins Saldanha</p>
+        <div class="footer__logos">
+            <a class="footer__link" href="https://www.instagram.com/carlos_bered?igsh=MThwc2Jwa2VrcDBjdQ%3D%3D&utm_source=qr" target="_blank"><img class="logo" src="img/instagram.png" alt="instagram Logo"></a>
+            <a class="footer__link" href="https://br.linkedin.com/in/carlos-eduardo-martins-saldanha-652205323" target="_blank"><img class="logo" src="img/linkedin.png" alt="linkedin logo"></a>
+            <a class="footer__link" href="https://github.com/Carlos-Bered" target="_blank"><img class="logo" src="img/github.png" alt="github logo"></a>
+        </div>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
