@@ -33,15 +33,25 @@ h2 {
     letter-spacing: -1px;
 }
 
-.nav, button {
-    height: 50px;
-    width: 150px;
-    border-radius: 50px;
-    border-color: #228937;
-    border-width: 5px;
-    font-size: 17px;
-    color: #ffff;
-    color: black;
+.nav {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+button {
+    height: 40px;
+    width: 120px;
+    border-radius: 5px;
+    border: 2px solid #228937;
+    font-size: 14px;
+    background-color: #228937;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #18622f;
 }
 
 .modal {
@@ -55,7 +65,7 @@ h2 {
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
-    align-items: center
+    align-items: center;
 }
 
 .modal-content {
@@ -97,16 +107,67 @@ input {
     margin-top: 10px;
 }
 
-table {
-    width: 80%;
-    margin: 20px auto;
-    border-collapse: collapse;
-    background: white;
+.lista-contas-mobile {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
 }
 
-th, td {
-    padding: 10px;
-    border: 1px solid #ddd;
+.card {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 280px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+}
+
+.card p {
+    margin: 0;
+    font-size: 16px;
+    color: #666;
+}
+
+.card .acoes {
+    display: flex;
+    gap: 10px;
+}
+
+.card button {
+    width: 100px;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.card .pagar {
+    background-color: #228937;
+    color: white;
+}
+
+.card .pagar:hover {
+    background-color: #18622f;
+}
+
+.card .deletar {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.card .deletar:hover {
+    background-color: #c0392b;
 }
 
 footer {
