@@ -120,7 +120,7 @@ input {
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    width: 280px;
+    width: 200px;
     text-align: left;
     display: flex;
     flex-direction: column;
@@ -159,6 +159,25 @@ input {
 
 .card .pagar:hover {
     background-color: #18622f;
+}
+
+.card .pagar.pago {
+    background-color: #e74c3c;
+    color: white;
+    cursor: not-allowed;
+}
+
+.card .pagar.pago:hover {
+    background-color: #c0392b;
+}
+
+.card .editar {
+    background-color: #f39c12;
+    color: white;
+}
+
+.card .editar:hover {
+    background-color: #e67e22;
 }
 
 .card .deletar {
