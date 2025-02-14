@@ -17,7 +17,7 @@ function atualizarCartoes() {
         
         const dataUltimaParcela = calcularUltimaParcela(conta.vencimento, conta.parcelas, conta.parcelasPagas);
 
-        novoCartao.innerHTML = 
+        novoCartao.innerHTML = `
             <h3>${conta.nome}</h3>
             <p>Vencimento: ${formatarData(conta.vencimento)}</p>
             <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
@@ -30,7 +30,7 @@ function atualizarCartoes() {
                 <button class="deletar" onclick="deletarConta(${index})">Deletar</button>
                 <button class="editar" onclick="editarConta(${index})">Editar</button>
             </div>
-        ;
+        `;
 
         listaContasMobile.appendChild(novoCartao);
     });
@@ -39,7 +39,7 @@ function atualizarCartoes() {
 function formatarData(data) {
     if (!data) return "Data Inválida";
     const [ano, mes, dia] = data.split("-");
-    return ${dia}/${mes}/${ano};
+    return `${dia}/${mes}/${ano}`;
 }
 
 function calcularUltimaParcela(dataVencimento, parcelas, parcelasPagas) {
