@@ -5,6 +5,7 @@ const formConta = document.getElementById("formConta");
 const listaContasMobile = document.getElementById("listaContasMobile");
 
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
+let contaEditandoIndex = null; 
 
 function atualizarCartoes() {
     listaContasMobile.innerHTML = '';
@@ -12,10 +13,8 @@ function atualizarCartoes() {
         const novoCartao = document.createElement("div");
         novoCartao.classList.add("card");
 
-        // Calcular o valor restante a pagar
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
-
-        // Calcular a data da última parcela
+        
         const dataUltimaParcela = calcularUltimaParcela(conta.vencimento, conta.parcelas, conta.parcelasPagas);
 
         novoCartao.innerHTML = `
@@ -38,22 +37,23 @@ function atualizarCartoes() {
 }
 
 function formatarData(data) {
+    if (!data) return "Data Inválida";
     const [ano, mes, dia] = data.split("-");
     return `${dia}/${mes}/${ano}`;
 }
 
-// Função para calcular a data da última parcela
 function calcularUltimaParcela(dataVencimento, parcelas, parcelasPagas) {
+    if (!dataVencimento) return "Data Inválida";
     const vencimento = new Date(dataVencimento);
     const mesesFaltando = parcelas - parcelasPagas - 1;
-    vencimento.setMonth(vencimento.getMonth() + mesesFaltando); // Adiciona as parcelas restantes
-    return vencimento.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    vencimento.setMonth(vencimento.getMonth() + mesesFaltando);
+    return vencimento.toISOString().split('T')[0];
 }
 
 function confirmarPagamento(index) {
     const conta = contas[index];
     const confirmar = confirm("Tem certeza de que deseja pagar esta conta?");
-
+    
     if (confirmar) {
         if (conta.parcelasPagas < conta.parcelas) {
             conta.parcelasPagas += 1;
@@ -79,11 +79,20 @@ function deletarConta(index) {
 }
 
 function editarConta(index) {
-    // Função para editar a conta, por enquanto, exibe os dados no console
-    console.log(contas[index]);
+    const conta = contas[index];
+    
+    document.getElementById("nomeConta").value = conta.nome;
+    document.getElementById("dataVencimento").value = conta.vencimento;
+    document.getElementById("valorTotal").value = conta.valor;
+    document.getElementById("parcelamento").value = conta.parcelas;
+    
+    contaEditandoIndex = index; 
+    modal.style.display = "flex";
 }
 
 btnAdicionar.addEventListener("click", () => {
+    contaEditandoIndex = null; 
+    formConta.reset();
     modal.style.display = "flex";
 });
 
@@ -104,17 +113,29 @@ formConta.addEventListener("submit", (event) => {
         return;
     }
 
-    contas.push({
-        nome: nomeConta,
-        vencimento: dataVencimento,
-        valor: valor,
-        parcelas: parcelas,
-        parcelasPagas: 0,
-        pago: false,
-    });
+    if (contaEditandoIndex !== null) {
+        
+        contas[contaEditandoIndex] = {
+            nome: nomeConta,
+            vencimento: dataVencimento,
+            valor: valor,
+            parcelas: parcelas,
+            parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
+            pago: contas[contaEditandoIndex].pago || false,
+        };
+    } else {
+
+        contas.push({
+            nome: nomeConta,
+            vencimento: dataVencimento,
+            valor: valor,
+            parcelas: parcelas,
+            parcelasPagas: 0,
+            pago: false,
+        });
+    }
 
     localStorage.setItem("contas", JSON.stringify(contas));
-
     atualizarCartoes();
     modal.style.display = "none";
     formConta.reset();
