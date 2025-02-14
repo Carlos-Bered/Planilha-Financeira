@@ -7,6 +7,15 @@ const listaContasMobile = document.getElementById("listaContasMobile");
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
 let contaEditandoIndex = null; 
 
+
+if (Notification.permission !== "denied") {
+    Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+            console.log("Permissão para notificações concedida!");
+        }
+    });
+}
+
 function atualizarCartoes() {
     listaContasMobile.innerHTML = '';
     contas.forEach((conta, index) => {
@@ -140,5 +149,24 @@ formConta.addEventListener("submit", (event) => {
     modal.style.display = "none";
     formConta.reset();
 });
+
+function verificarContasAVencer() {
+    const hoje = new Date();
+    const amanha = new Date(hoje);
+    amanha.setDate(hoje.getDate() + 1);
+
+    contas.forEach(conta => {
+        const vencimento = new Date(conta.vencimento);
+        if (vencimento.toDateString() === amanha.toDateString()) {
+            if (Notification.permission === "granted") {
+                new Notification(`Atenção: A conta ${conta.nome} vence amanhã!`, {
+                    body: `Valor: R$ ${conta.valor.toFixed(2)}. Não se esqueça de pagar!`,
+                });
+            }
+        }
+    });
+}
+
+verificarContasAVencer();
 
 atualizarCartoes();
