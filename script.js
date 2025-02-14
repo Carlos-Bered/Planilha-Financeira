@@ -5,7 +5,43 @@ const formConta = document.getElementById("formConta");
 const listaContasMobile = document.getElementById("listaContasMobile");
 
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
-let contaEditandoIndex = null; 
+let contaEditandoIndex = null;
+
+
+if ("Notification" in window) {
+    Notification.requestPermission().then(function(permission) {
+        if (permission === "granted") {
+            console.log("Permissão para notificações concedida!");
+        } else {
+            console.log("Permissão para notificações negada.");
+        }
+    });
+}
+
+
+function verificarContasAVencer() {
+    const hoje = new Date();
+    contas.forEach((conta, index) => {
+        const dataVencimento = new Date(conta.vencimento);
+        const diffTime = dataVencimento - hoje;
+        const umDiaEmMilissegundos = 24 * 60 * 60 * 1000; 
+        
+        
+        if (diffTime > 0 && diffTime <= umDiaEmMilissegundos) {
+            if (Notification.permission === "granted") {
+                new Notification(`Lembrete: Conta ${conta.nome} vence amanhã!`, {
+                    body: `A conta ${conta.nome} vence em 1 dia. Não se esqueça de pagar!`,
+                   
+                });
+            }
+        }
+    });
+}
+
+
+setInterval(verificarContasAVencer, 60 * 60 * 1000);  
+
+verificarContasAVencer();
 
 function atualizarCartoes() {
     listaContasMobile.innerHTML = '';
@@ -63,6 +99,14 @@ function confirmarPagamento(index) {
         } 
         if (conta.parcelasPagas === conta.parcelas) {
             conta.pago = true;
+            
+            
+            if (Notification.permission === "granted") {
+                new Notification(`Conta ${conta.nome} paga!`, {
+                    body: `A conta ${conta.nome} foi totalmente paga.`,
+                   
+                });
+            }
         }
         localStorage.setItem("contas", JSON.stringify(contas));
         atualizarCartoes();
@@ -72,9 +116,18 @@ function confirmarPagamento(index) {
 function deletarConta(index) {
     const confirmar = confirm("Tem certeza de que deseja deletar esta conta?");
     if (confirmar) {
+        const contaDeletada = contas[index];
         contas.splice(index, 1);
         localStorage.setItem("contas", JSON.stringify(contas));
         atualizarCartoes();
+
+        /
+        if (Notification.permission === "granted") {
+            new Notification(`Conta ${contaDeletada.nome} deletada!`, {
+                body: `A conta ${contaDeletada.nome} foi deletada.`,
+                
+            });
+        }
     }
 }
 
