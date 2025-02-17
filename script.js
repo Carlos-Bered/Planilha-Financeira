@@ -7,6 +7,7 @@ const listaContasMobile = document.getElementById("listaContasMobile");
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
 let contaEditandoIndex = null; 
 
+// Se o usuário não tiver negado as notificações, pedimos permissão para as notificações
 if (Notification.permission !== "denied") {
     Notification.requestPermission().then(permission => {
         if (permission === "granted") {
@@ -108,7 +109,7 @@ fechar.addEventListener("click", () => {
     modal.style.display = "none";
 });
 
-// Fechar o modal ao clicar fora dele (novo evento adicionado)
+// Fechar o modal ao clicar fora dele
 window.addEventListener("click", (e) => {
     if (e.target === modal) {
         modal.style.display = "none";
@@ -128,6 +129,7 @@ formConta.addEventListener("submit", (event) => {
         return;
     }
 
+    // Verificando se estamos editando ou criando uma nova conta
     if (contaEditandoIndex !== null) {
         contas[contaEditandoIndex] = {
             nome: nomeConta,
@@ -148,12 +150,14 @@ formConta.addEventListener("submit", (event) => {
         });
     }
 
+    // Atualizando o localStorage
     localStorage.setItem("contas", JSON.stringify(contas));
     atualizarCartoes();
     modal.style.display = "none";
     formConta.reset();
 });
 
+// Função de verificação das contas a vencer
 function verificarContasAVencer() {
     const hoje = new Date();
     const amanha = new Date(hoje);
