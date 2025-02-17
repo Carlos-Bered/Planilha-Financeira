@@ -1,11 +1,11 @@
 const btnAdicionar = document.getElementById("adicionarConta");
 const modal = document.getElementById("modal");
-const fecharBtn = document.getElementById("fecharModal");
+const btnFechar = document.getElementById("fecharModal"); // Botão fechar
 const formConta = document.getElementById("formConta");
 const listaContasMobile = document.getElementById("listaContasMobile");
 
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
-let contaEditandoIndex = null;
+let contaEditandoIndex = null; 
 
 if (Notification.permission !== "denied") {
     Notification.requestPermission().then(permission => {
@@ -104,7 +104,7 @@ btnAdicionar.addEventListener("click", () => {
     modal.style.display = "flex";
 });
 
-fecharBtn.addEventListener("click", () => {
+btnFechar.addEventListener("click", () => {
     modal.style.display = "none";
 });
 
