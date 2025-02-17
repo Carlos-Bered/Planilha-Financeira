@@ -54,44 +54,39 @@ button:hover {
     background-color: #18622f;
 }
 
+/* Modal */
 .modal {
-    display: none;
+    display: none; 
     position: fixed;
-    z-index: 1;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: rgba(0, 0, 0, 0.7); 
+    z-index: 9999; 
 }
 
 .modal-content {
-    background: white;
-    padding: 25px;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 500px; /* Ajuste a largura máxima */
-    text-align: center;
-    flex-direction: column;
-}
-
-.salvar-modal {
-    width: 150px;
-    margin-top: 30px;
+    position: relative;
+    margin: 10% auto;
+    background: #fff;
+    padding: 20px;
+    width: 80%; 
+    max-width: 500px;
+    border-radius: 8px;
 }
 
 .fechar {
-    font-size: 18px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 16px;
     background-color: #e74c3c;
     color: white;
     border: none;
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 10px;
 }
 
 .fechar:hover {
@@ -229,14 +224,16 @@ footer {
     height: 30px;
 }
 
-/* Ajustes específicos para dispositivos móveis */
+/* Responsividade para telas pequenas */
 @media (max-width: 768px) {
     .modal-content {
-        width: 80%; /* Menor largura para telas pequenas */
-        padding: 20px;
+        width: 90%;
     }
 
     .fechar {
-        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+        top: 15px;
+        right: 15px;
     }
 }
