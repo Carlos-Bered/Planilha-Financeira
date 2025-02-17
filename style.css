@@ -75,7 +75,11 @@ button:hover {
     width: 400px;
     text-align: center;
     flex-direction: column;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
 }
+
 
 .salvar-modal {
     width: 150px;
