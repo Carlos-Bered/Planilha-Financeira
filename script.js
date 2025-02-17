@@ -109,6 +109,10 @@ fechar.addEventListener("click", () => {
     modal.style.display = "none";
 });
 
+fechar.addEventListener("touchstart", () => {
+    modal.style.display = "none";
+});
+
 formConta.addEventListener("submit", (event) => {
     event.preventDefault();
 
