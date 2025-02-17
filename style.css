@@ -72,7 +72,8 @@ button:hover {
     background: white;
     padding: 25px;
     border-radius: 20px;
-    width: 400px;
+    width: 90%;
+    max-width: 500px; /* Ajuste a largura máxima */
     text-align: center;
     flex-direction: column;
 }
@@ -226,4 +227,16 @@ footer {
 .logo, .footer__link {
     width: 30px;
     height: 30px;
+}
+
+/* Ajustes específicos para dispositivos móveis */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 80%; /* Menor largura para telas pequenas */
+        padding: 20px;
+    }
+
+    .fechar {
+        width: 100%;
+    }
 }
