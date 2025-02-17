@@ -1,12 +1,11 @@
 const btnAdicionar = document.getElementById("adicionarConta");
 const modal = document.getElementById("modal");
-const fechar = document.querySelector(".fechar");
+const fecharModal = document.getElementById("fecharModal");
 const formConta = document.getElementById("formConta");
 const listaContasMobile = document.getElementById("listaContasMobile");
 
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
-let contaEditandoIndex = null; 
-
+let contaEditandoIndex = null;
 
 if (Notification.permission !== "denied") {
     Notification.requestPermission().then(permission => {
@@ -105,11 +104,11 @@ btnAdicionar.addEventListener("click", () => {
     modal.style.display = "flex";
 });
 
-fechar.addEventListener("click", () => {
+fecharModal.addEventListener("click", () => {
     modal.style.display = "none";
 });
 
-fechar.addEventListener("touchstart", () => {
+fecharModal.addEventListener("touchstart", () => {
     modal.style.display = "none";
 });
 
@@ -127,7 +126,6 @@ formConta.addEventListener("submit", (event) => {
     }
 
     if (contaEditandoIndex !== null) {
-        
         contas[contaEditandoIndex] = {
             nome: nomeConta,
             vencimento: dataVencimento,
@@ -137,7 +135,6 @@ formConta.addEventListener("submit", (event) => {
             pago: contas[contaEditandoIndex].pago || false,
         };
     } else {
-
         contas.push({
             nome: nomeConta,
             vencimento: dataVencimento,
@@ -172,5 +169,4 @@ function verificarContasAVencer() {
 }
 
 verificarContasAVencer();
-
 atualizarCartoes();
