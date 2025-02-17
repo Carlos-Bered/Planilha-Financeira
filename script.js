@@ -108,6 +108,13 @@ fechar.addEventListener("click", () => {
     modal.style.display = "none";
 });
 
+// Escutador para fechar o modal quando clicar fora dele (ajuste para celular)
+window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        modal.style.display = "none";
+    }
+});
+
 formConta.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -122,7 +129,6 @@ formConta.addEventListener("submit", (event) => {
     }
 
     if (contaEditandoIndex !== null) {
-        
         contas[contaEditandoIndex] = {
             nome: nomeConta,
             vencimento: dataVencimento,
@@ -132,7 +138,6 @@ formConta.addEventListener("submit", (event) => {
             pago: contas[contaEditandoIndex].pago || false,
         };
     } else {
-
         contas.push({
             nome: nomeConta,
             vencimento: dataVencimento,
