@@ -1,239 +1,157 @@
+/* Geral */
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    height: 100vh;
+    font-family: Arial, sans-serif;
     margin: 0;
-    background-color: #f4f4f4;
-    text-align: center;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-header {
-    background-color: rgb(0, 0, 0);
-    height: 80px;
+/* Cartões de Contas */
+.card {
+    background-color: #fff;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    margin-top: 0;
+    font-size: 18px;
+}
+
+.card p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+/* Botões de Ação */
+.acoes {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
+    margin-top: 10px;
 }
 
-.ICON {
-    display: flex;
-    align-items: center;
-}
-
-.ICON img {
-    width: 65px;
-    height: auto;
-    margin-right: 10px;
-}
-
-h2 {
+.acoes button {
+    background-color: #007bff;
     color: #fff;
-    font-size: 30px;
-    margin: 0;
-    letter-spacing: -1px;
-}
-
-.nav {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-button {
-    height: 40px;
-    width: 120px;
-    border-radius: 5px;
-    border: 2px solid #228937;
-    font-size: 14px;
-    background-color: #228937;
-    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 14px;
 }
 
-button:hover {
-    background-color: #18622f;
+.acoes button:hover {
+    background-color: #0056b3;
+}
+
+.acoes button:disabled {
+    background-color: #ccc;
 }
 
 /* Modal */
-.modal {
-    display: none; 
+#modal {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7); 
-    z-index: 9999; 
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+    display: none; /* Inicialmente escondido */
+    z-index: 9999; /* Garante que o modal ficará acima de outros elementos */
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
 }
 
-.modal-content {
-    position: relative;
-    margin: 10% auto;
-    background: #fff;
+#modal .modal-content {
+    background-color: white;
     padding: 20px;
-    width: 80%; 
+    border-radius: 5px;
+    width: 90%; /* Ajuste para celular */
     max-width: 500px;
-    border-radius: 8px;
+    margin: 0 auto;
 }
 
+#modal .modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#modal .modal-content button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#modal .modal-content button:hover {
+    background-color: #0056b3;
+}
+
+/* Botão de Fechar */
 .fechar {
     position: absolute;
     top: 10px;
     right: 10px;
-    font-size: 16px;
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
+    font-size: 24px;
     cursor: pointer;
 }
 
-.fechar:hover {
-    background-color: #c0392b;
+/* Responsividade */
+@media (max-width: 600px) {
+    .card {
+        padding: 15px;
+        margin: 5px 0;
+    }
+
+    .acoes {
+        flex-direction: column;
+    }
+
+    .acoes button {
+        margin-bottom: 10px;
+    }
 }
 
-label {
-    font-size: 20px;
-    margin-top: 10px;
+/* Estilo do botão de Adicionar Conta */
+#adicionarConta {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 20px;
 }
 
-.coisas {
+#adicionarConta:hover {
+    background-color: #218838;
+}
+
+/* Layout geral */
+#listaContasMobile {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-}
-
-input {
-    width: 100%;
-    height: 40px;
-    padding: 5px;
-    font-size: 18px;
-    margin-top: 10px;
-}
-
-.lista-contas-mobile {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
     padding: 20px;
 }
 
-.card {
-    background-color: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    width: 200px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.card h3 {
-    margin: 0;
-    font-size: 20px;
-    color: #333;
-}
-
-.card p {
-    margin: 0;
-    font-size: 16px;
-    color: #666;
-}
-
-.card .acoes {
-    display: flex;
-    gap: 10px;
-}
-
-.card button {
-    width: 100px;
-    padding: 8px;
+/* Notificação */
+.notification {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
     border-radius: 5px;
-    border: none;
-    cursor: pointer;
-}
-
-.card .pagar {
-    background-color: #228937;
-    color: white;
-}
-
-.card .pagar:hover {
-    background-color: #18622f;
-}
-
-.card .pagar.pago {
-    background-color: #e74c3c;
-    color: white;
-    cursor: not-allowed;
-}
-
-.card .pagar.pago:hover {
-    background-color: #c0392b;
-}
-
-.card .editar {
-    background-color: #f39c12;
-    color: white;
-}
-
-.card .editar:hover {
-    background-color: #e67e22;
-}
-
-.card .deletar {
-    background-color: #e74c3c;
-    color: white;
-}
-
-.card .deletar:hover {
-    background-color: #c0392b;
-}
-
-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: black;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-}
-
-.footer__autor {
-    font-size: 17px;
-    margin: 0;
-}
-
-.footer__logos {
-    display: flex;
-    gap: 10px;
-    padding-right: 30px;
-}
-
-.logo, .footer__link {
-    width: 30px;
-    height: 30px;
-}
-
-/* Responsividade para telas pequenas */
-@media (max-width: 768px) {
-    .modal-content {
-        width: 90%;
-    }
-
-    .fechar {
-        padding: 15px;
-        font-size: 18px;
-        top: 15px;
-        right: 15px;
-    }
+    z-index: 9999;
 }
