@@ -7,7 +7,6 @@ const listaContasMobile = document.getElementById("listaContasMobile");
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
 let contaEditandoIndex = null; 
 
-
 if (Notification.permission !== "denied") {
     Notification.requestPermission().then(permission => {
         if (permission === "granted") {
@@ -40,7 +39,7 @@ function atualizarCartoes() {
                 <button class="deletar" onclick="deletarConta(${index})">Deletar</button>
                 <button class="editar" onclick="editarConta(${index})">Editar</button>
             </div>`;
-        
+
         listaContasMobile.appendChild(novoCartao);
     });
 }
@@ -123,7 +122,6 @@ formConta.addEventListener("submit", (event) => {
     }
 
     if (contaEditandoIndex !== null) {
-        
         contas[contaEditandoIndex] = {
             nome: nomeConta,
             vencimento: dataVencimento,
@@ -133,7 +131,6 @@ formConta.addEventListener("submit", (event) => {
             pago: contas[contaEditandoIndex].pago || false,
         };
     } else {
-
         contas.push({
             nome: nomeConta,
             vencimento: dataVencimento,
@@ -168,5 +165,4 @@ function verificarContasAVencer() {
 }
 
 verificarContasAVencer();
-
 atualizarCartoes();
