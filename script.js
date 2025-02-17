@@ -5,7 +5,7 @@ const formConta = document.getElementById("formConta");
 const listaContasMobile = document.getElementById("listaContasMobile");
 
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
-let contaEditandoIndex = null; 
+let contaEditandoIndex = null;
 
 if (Notification.permission !== "denied") {
     Notification.requestPermission().then(permission => {
