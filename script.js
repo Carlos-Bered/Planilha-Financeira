@@ -5,7 +5,7 @@ const formConta = document.getElementById("formConta");
 const listaContasMobile = document.getElementById("listaContasMobile");
 
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
-let contaEditandoIndex = null;
+let contaEditandoIndex = null; 
 
 if (Notification.permission !== "denied") {
     Notification.requestPermission().then(permission => {
@@ -22,7 +22,7 @@ function atualizarCartoes() {
         novoCartao.classList.add("card");
 
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
-
+        
         const dataUltimaParcela = calcularUltimaParcela(conta.vencimento, conta.parcelas, conta.parcelasPagas);
 
         novoCartao.innerHTML = `
@@ -104,15 +104,13 @@ btnAdicionar.addEventListener("click", () => {
     modal.style.display = "flex";
 });
 
+// Usando touchstart para dispositivos móveis
 fechar.addEventListener("click", () => {
     modal.style.display = "none";
 });
 
-// Escutador para fechar o modal quando clicar fora dele (ajuste para celular)
-window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-        modal.style.display = "none";
-    }
+fechar.addEventListener("touchstart", () => {
+    modal.style.display = "none";
 });
 
 formConta.addEventListener("submit", (event) => {
@@ -129,6 +127,7 @@ formConta.addEventListener("submit", (event) => {
     }
 
     if (contaEditandoIndex !== null) {
+        
         contas[contaEditandoIndex] = {
             nome: nomeConta,
             vencimento: dataVencimento,
@@ -172,5 +171,4 @@ function verificarContasAVencer() {
 }
 
 verificarContasAVencer();
-
 atualizarCartoes();
