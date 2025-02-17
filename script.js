@@ -1,3 +1,4 @@
+// Variáveis
 const btnAdicionar = document.getElementById("adicionarConta");
 const modal = document.getElementById("modal");
 const fechar = document.querySelector(".fechar");
@@ -5,63 +6,43 @@ const formConta = document.getElementById("formConta");
 const listaContasMobile = document.getElementById("listaContasMobile");
 
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
-let contaEditandoIndex = null; 
+let contaEditandoIndex = null;
 
-if (Notification.permission !== "denied") {
-    Notification.requestPermission().then(permission => {
-        if (permission === "granted") {
-            console.log("Permissão para notificações concedida!");
-        }
-    });
-}
-
+// Atualiza os cartões de contas
 function atualizarCartoes() {
-    listaContasMobile.innerHTML = '';
+    listaContasMobile.innerHTML = ''; // Limpa os cartões
     contas.forEach((conta, index) => {
         const novoCartao = document.createElement("div");
         novoCartao.classList.add("card");
-
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
-        const valorParcela = (conta.valor / conta.parcelas).toFixed(2); // Calculando o valor de cada parcela
-        const dataUltimaParcela = calcularUltimaParcela(conta.vencimento, conta.parcelas, conta.parcelasPagas);
-
+        
+        // Formatação da data
         novoCartao.innerHTML = 
             `<h3>${conta.nome}</h3>
             <p>Vencimento: ${formatarData(conta.vencimento)}</p>
             <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
             <p>Parcelas: ${conta.parcelas}</p>
-            <p>Valor de Cada Parcela: R$ ${valorParcela}</p> <!-- Valor das parcelas -->
             <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
             <p>Valor Restante: R$ ${valorRestante}</p>
-            <p>Última Parcela: ${formatarData(dataUltimaParcela)}</p>
             <div class="acoes">
                 <button class="pagar" onclick="confirmarPagamento(${index})">${conta.pago ? 'Pago' : 'Pagar'}</button>
                 <button class="deletar" onclick="deletarConta(${index})">Deletar</button>
                 <button class="editar" onclick="editarConta(${index})">Editar</button>
             </div>`;
-
         listaContasMobile.appendChild(novoCartao);
     });
 }
 
+// Formatar data
 function formatarData(data) {
-    if (!data) return "Data Inválida";
     const [ano, mes, dia] = data.split("-");
     return `${dia}/${mes}/${ano}`;
 }
 
-function calcularUltimaParcela(dataVencimento, parcelas, parcelasPagas) {
-    if (!dataVencimento) return "Data Inválida";
-    const vencimento = new Date(dataVencimento);
-    const mesesFaltando = parcelas - parcelasPagas - 1;
-    vencimento.setMonth(vencimento.getMonth() + mesesFaltando);
-    return vencimento.toISOString().split('T')[0];
-}
-
+// Confirmar pagamento
 function confirmarPagamento(index) {
     const conta = contas[index];
     const confirmar = confirm("Tem certeza de que deseja pagar esta conta?");
-    
     if (confirmar) {
         if (conta.parcelasPagas < conta.parcelas) {
             conta.parcelasPagas += 1;
@@ -77,6 +58,7 @@ function confirmarPagamento(index) {
     }
 }
 
+// Deletar conta
 function deletarConta(index) {
     const confirmar = confirm("Tem certeza de que deseja deletar esta conta?");
     if (confirmar) {
@@ -86,9 +68,9 @@ function deletarConta(index) {
     }
 }
 
+// Editar conta
 function editarConta(index) {
     const conta = contas[index];
-    
     document.getElementById("nomeConta").value = conta.nome;
     document.getElementById("dataVencimento").value = conta.vencimento;
     document.getElementById("valorTotal").value = conta.valor;
@@ -98,16 +80,26 @@ function editarConta(index) {
     modal.style.display = "flex";
 }
 
+// Abrir o modal
 btnAdicionar.addEventListener("click", () => {
-    contaEditandoIndex = null; 
+    contaEditandoIndex = null;
     formConta.reset();
     modal.style.display = "flex";
 });
 
+// Fechar o modal clicando no botão de fechar
 fechar.addEventListener("click", () => {
     modal.style.display = "none";
 });
 
+// Fechar o modal clicando fora dele
+window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        modal.style.display = "none";
+    }
+});
+
+// Salvar conta ao submeter o formulário
 formConta.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -116,12 +108,14 @@ formConta.addEventListener("submit", (event) => {
     const valor = parseFloat(document.getElementById("valorTotal").value);
     const parcelas = parseInt(document.getElementById("parcelamento").value);
 
+    // Verificação dos dados
     if (!nomeConta || !dataVencimento || isNaN(valor) || isNaN(parcelas) || parcelas <= 0) {
         alert("Por favor, preencha todos os campos corretamente!");
         return;
     }
 
     if (contaEditandoIndex !== null) {
+        // Editar conta
         contas[contaEditandoIndex] = {
             nome: nomeConta,
             vencimento: dataVencimento,
@@ -131,6 +125,7 @@ formConta.addEventListener("submit", (event) => {
             pago: contas[contaEditandoIndex].pago || false,
         };
     } else {
+        // Adicionar nova conta
         contas.push({
             nome: nomeConta,
             vencimento: dataVencimento,
@@ -141,28 +136,11 @@ formConta.addEventListener("submit", (event) => {
         });
     }
 
+    // Atualizar o localStorage
     localStorage.setItem("contas", JSON.stringify(contas));
     atualizarCartoes();
-    modal.style.display = "none";
+    modal.style.display = "none";  // Fechar modal
     formConta.reset();
 });
 
-function verificarContasAVencer() {
-    const hoje = new Date();
-    const amanha = new Date(hoje);
-    amanha.setDate(hoje.getDate() + 1);
-
-    contas.forEach(conta => {
-        const vencimento = new Date(conta.vencimento);
-        if (vencimento.toDateString() === amanha.toDateString()) {
-            if (Notification.permission === "granted") {
-                new Notification(`Atenção: A conta ${conta.nome} vence amanhã!`, {
-                    body: `Valor: R$ ${conta.valor.toFixed(2)}. Não se esqueça de pagar!`,
-                });
-            }
-        }
-    });
-}
-
-verificarContasAVencer();
-atualizarCartoes();
+atualizarCartoes(); // Inicializa os cartões de contas
