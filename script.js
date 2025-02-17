@@ -1,6 +1,6 @@
 const btnAdicionar = document.getElementById("adicionarConta");
 const modal = document.getElementById("modal");
-const fecharModal = document.getElementById("fecharModal");
+const fecharBtn = document.getElementById("fecharModal");
 const formConta = document.getElementById("formConta");
 const listaContasMobile = document.getElementById("listaContasMobile");
 
@@ -104,11 +104,7 @@ btnAdicionar.addEventListener("click", () => {
     modal.style.display = "flex";
 });
 
-fecharModal.addEventListener("click", () => {
-    modal.style.display = "none";
-});
-
-fecharModal.addEventListener("touchstart", () => {
+fecharBtn.addEventListener("click", () => {
     modal.style.display = "none";
 });
 
@@ -169,4 +165,5 @@ function verificarContasAVencer() {
 }
 
 verificarContasAVencer();
+
 atualizarCartoes();
