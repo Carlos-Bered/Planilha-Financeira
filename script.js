@@ -1,11 +1,12 @@
 const btnAdicionar = document.getElementById("adicionarConta");
 const modal = document.getElementById("modal");
-const btnFechar = document.getElementById("fecharModal"); // Botão fechar
+const fechar = document.querySelector(".fechar");
 const formConta = document.getElementById("formConta");
 const listaContasMobile = document.getElementById("listaContasMobile");
 
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
 let contaEditandoIndex = null; 
+
 
 if (Notification.permission !== "denied") {
     Notification.requestPermission().then(permission => {
@@ -25,7 +26,7 @@ function atualizarCartoes() {
         
         const dataUltimaParcela = calcularUltimaParcela(conta.vencimento, conta.parcelas, conta.parcelasPagas);
 
-        novoCartao.innerHTML = `
+        novoCartao.innerHTML = 
             <h3>${conta.nome}</h3>
             <p>Vencimento: ${formatarData(conta.vencimento)}</p>
             <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
@@ -38,7 +39,7 @@ function atualizarCartoes() {
                 <button class="deletar" onclick="deletarConta(${index})">Deletar</button>
                 <button class="editar" onclick="editarConta(${index})">Editar</button>
             </div>
-        `;
+        ;
 
         listaContasMobile.appendChild(novoCartao);
     });
@@ -47,7 +48,7 @@ function atualizarCartoes() {
 function formatarData(data) {
     if (!data) return "Data Inválida";
     const [ano, mes, dia] = data.split("-");
-    return `${dia}/${mes}/${ano}`;
+    return ${dia}/${mes}/${ano};
 }
 
 function calcularUltimaParcela(dataVencimento, parcelas, parcelasPagas) {
@@ -104,7 +105,7 @@ btnAdicionar.addEventListener("click", () => {
     modal.style.display = "flex";
 });
 
-btnFechar.addEventListener("click", () => {
+fechar.addEventListener("click", () => {
     modal.style.display = "none";
 });
 
@@ -122,6 +123,7 @@ formConta.addEventListener("submit", (event) => {
     }
 
     if (contaEditandoIndex !== null) {
+        
         contas[contaEditandoIndex] = {
             nome: nomeConta,
             vencimento: dataVencimento,
@@ -131,6 +133,7 @@ formConta.addEventListener("submit", (event) => {
             pago: contas[contaEditandoIndex].pago || false,
         };
     } else {
+
         contas.push({
             nome: nomeConta,
             vencimento: dataVencimento,
@@ -156,8 +159,8 @@ function verificarContasAVencer() {
         const vencimento = new Date(conta.vencimento);
         if (vencimento.toDateString() === amanha.toDateString()) {
             if (Notification.permission === "granted") {
-                new Notification(`Atenção: A conta ${conta.nome} vence amanhã!`, {
-                    body: `Valor: R$ ${conta.valor.toFixed(2)}. Não se esqueça de pagar!`,
+                new Notification(Atenção: A conta ${conta.nome} vence amanhã!, {
+                    body: Valor: R$ ${conta.valor.toFixed(2)}. Não se esqueça de pagar!,
                 });
             }
         }
