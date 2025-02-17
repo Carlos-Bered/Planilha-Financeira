@@ -118,6 +118,14 @@ body {
     .acoes button {
         margin-bottom: 10px;
     }
+
+    #modal .modal-content {
+        width: 95%; /* Garantir que o modal se ajuste bem em telas pequenas */
+    }
+
+    .fechar {
+        font-size: 20px; /* Ajustar tamanho do botão de fechar em telas pequenas */
+    }
 }
 
 /* Estilo do botão de Adicionar Conta */
