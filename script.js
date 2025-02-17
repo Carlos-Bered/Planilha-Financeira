@@ -25,8 +25,8 @@ function atualizarCartoes() {
         
         const dataUltimaParcela = calcularUltimaParcela(conta.vencimento, conta.parcelas, conta.parcelasPagas);
 
-        novoCartao.innerHTML = `
-            <h3>${conta.nome}</h3>
+        novoCartao.innerHTML = 
+            `<h3>${conta.nome}</h3>
             <p>Vencimento: ${formatarData(conta.vencimento)}</p>
             <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
             <p>Parcelas: ${conta.parcelas}</p>
@@ -37,8 +37,7 @@ function atualizarCartoes() {
                 <button class="pagar" onclick="confirmarPagamento(${index})">${conta.pago ? 'Pago' : 'Pagar'}</button>
                 <button class="deletar" onclick="deletarConta(${index})">Deletar</button>
                 <button class="editar" onclick="editarConta(${index})">Editar</button>
-            </div>
-        `;
+            </div>`;
 
         listaContasMobile.appendChild(novoCartao);
     });
@@ -104,13 +103,16 @@ btnAdicionar.addEventListener("click", () => {
     modal.style.display = "flex";
 });
 
-// Usando touchstart para dispositivos móveis
+// Fechar o modal ao clicar no botão "fechar"
 fechar.addEventListener("click", () => {
     modal.style.display = "none";
 });
 
-fechar.addEventListener("touchstart", () => {
-    modal.style.display = "none";
+// Fechar o modal ao clicar fora dele
+modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        modal.style.display = "none";
+    }
 });
 
 formConta.addEventListener("submit", (event) => {
@@ -127,7 +129,6 @@ formConta.addEventListener("submit", (event) => {
     }
 
     if (contaEditandoIndex !== null) {
-        
         contas[contaEditandoIndex] = {
             nome: nomeConta,
             vencimento: dataVencimento,
