@@ -18,7 +18,7 @@ function atualizarCartoes() {
         const valorRestante = (conta.valor - (conta.parcelasPagas * conta.valorParcela)).toFixed(2);
         
         // Calcular a data da última parcela fixa
-        const ultimaParcela = calcularUltimaParcela(conta.vencimento, conta.parcelas);
+        const ultimaParcelaData = calcularUltimaParcela(conta.vencimento, conta.parcelas);
 
         // Formatação da data
         novoCartao.innerHTML = 
@@ -29,7 +29,7 @@ function atualizarCartoes() {
             <p>Parcelas: ${conta.parcelas}</p>
             <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
             <p>Valor Restante: R$ ${valorRestante}</p>
-            <p>Última Parcela: R$ ${conta.ultimaParcela}</p> <!-- Valor fixo da última parcela -->
+            <p>Última Parcela: ${formatarData(ultimaParcelaData)}</p> <!-- Data da última parcela -->
             <div class="acoes">
                 <button class="pagar" onclick="confirmarPagamento(${index})">${conta.pago ? 'Pago' : 'Pagar'}</button>
                 <button class="deletar" onclick="deletarConta(${index})">Deletar</button>
@@ -39,16 +39,18 @@ function atualizarCartoes() {
     });
 }
 
-// Função para calcular a última parcela
+// Função para calcular a data da última parcela
 function calcularUltimaParcela(vencimento, parcelas) {
     const dataVencimento = new Date(vencimento);
     dataVencimento.setMonth(dataVencimento.getMonth() + parcelas - 1); // A última parcela será o vencimento + número de parcelas - 1
-    return formatarData(dataVencimento.toISOString().split('T')[0]);
+    return dataVencimento;
 }
 
 // Função para formatar a data
 function formatarData(data) {
-    const [ano, mes, dia] = data.split("-");
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const ano = data.getFullYear();
     return `${dia}/${mes}/${ano}`;
 }
 
@@ -131,10 +133,10 @@ formConta.addEventListener("submit", (event) => {
         return;
     }
 
-    // Calcular o valor de cada parcela, garantindo que o valor total seja sempre dividido de forma justa
+    // Calcular o valor de cada parcela
     const valorParcela = (valor / parcelas).toFixed(2); // Valor fixo para todas as parcelas
 
-    // A última parcela é fixa, e vamos apenas garantir que ela seja a diferença entre o valor total e o valor das parcelas anteriores
+    // A última parcela será ajustada para completar o valor total
     const ultimoValorParcela = (valor - (valorParcela * (parcelas - 1))).toFixed(2);
 
     if (contaEditandoIndex !== null) {
