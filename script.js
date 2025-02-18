@@ -16,10 +16,8 @@ function atualizarCartoes() {
         novoCartao.classList.add("card");
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
 
-        // Calcular a data da última parcela
-        const dataVencimento = new Date(conta.vencimento);
-        dataVencimento.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // Adiciona o número de parcelas - 1
-        const ultimaParcela = formatarData(dataVencimento.toISOString().split('T')[0]); // Formatar data da última parcela
+        // Calcular a data da última parcela (fixa)
+        const ultimaParcela = calcularUltimaParcela(conta.vencimento, conta.parcelas);
 
         // Formatação da data
         novoCartao.innerHTML = 
@@ -42,15 +40,21 @@ function atualizarCartoes() {
 
 // Formatar data
 function formatarData(data) {
-    // Se a data for uma string no formato "YYYY-MM-DD", converte para um objeto Date
     if (typeof data === 'string') {
-        data = new Date(data); // Converte a string para um objeto Date
+        data = new Date(data);
     }
 
     const dia = String(data.getDate()).padStart(2, '0');
     const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses começam de 0
     const ano = data.getFullYear();
     return `${dia}/${mes}/${ano}`;
+}
+
+// Calcular a data da última parcela (fixa)
+function calcularUltimaParcela(dataVencimento, parcelas) {
+    const data = new Date(dataVencimento);
+    data.setMonth(data.getMonth() + parcelas - 1); // Adiciona o número de parcelas - 1
+    return formatarData(data); // Formata a data de vencimento final
 }
 
 // Confirmar pagamento
