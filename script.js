@@ -40,6 +40,8 @@ function atualizarCartoes() {
     });
 }
 
+const valorParcela = valor / parcelas;
+
 // Formatar data
 function formatarData(data) {
     const [ano, mes, dia] = data.split("-");
