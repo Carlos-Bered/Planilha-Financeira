@@ -32,6 +32,9 @@ function atualizarCartoes() {
         const ultimaParcela = new Date(dataVencimento);
         ultimaParcela.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // Calcula a última parcela com base na data de vencimento
 
+        // Ajustar para manter o mesmo dia (não alterar o dia)
+        ultimaParcela.setDate(dataVencimento.getDate()); // Garantir que o dia permaneça igual
+
         // Formatando a última parcela
         const ultimaParcelaFormatada = formatarData(ultimaParcela.toISOString().split('T')[0]);
 
