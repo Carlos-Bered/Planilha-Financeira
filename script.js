@@ -8,6 +8,12 @@ const listaContasMobile = document.getElementById("listaContasMobile");
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
 let contaEditandoIndex = null;
 
+// Formatar data
+function formatarData(data) {
+    const [ano, mes, dia] = data.split("-");
+    return `${dia}/${mes}/${ano}`;
+}
+
 // Atualiza os cartões de contas
 function atualizarCartoes() {
     listaContasMobile.innerHTML = ''; // Limpa os cartões
@@ -15,20 +21,21 @@ function atualizarCartoes() {
         const novoCartao = document.createElement("div");
         novoCartao.classList.add("card");
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
-        
-        // A data da última parcela permanece fixa
-        const ultimaParcela = formatarData(conta.ultimaParcela);
 
-        // Formatação do cartão
+        // Manter a data de vencimento conforme o usuário escolheu
+        const dataVencimento = new Date(conta.vencimento);
+        dataVencimento.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // A data final de vencimento deve ser ajustada corretamente
+        const ultimaParcela = formatarData(dataVencimento.toISOString().split('T')[0]); // Data final de vencimento (fixa)
+
         novoCartao.innerHTML = 
             `<h3>${conta.nome}</h3>
             <p>Vencimento: ${formatarData(conta.vencimento)}</p>
             <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
-            <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valor / conta.parcelas).toFixed(2)}</p>
+            <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valorParcela).toFixed(2)}</p>
             <p>Parcelas: ${conta.parcelas}</p>
             <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
             <p>Valor Restante: R$ ${valorRestante}</p>
-            <p>Última Parcela: ${ultimaParcela}</p> <!-- Data da última parcela fixa -->
+            <p>Última Parcela: ${ultimaParcela}</p>
             <div class="acoes">
                 <button class="pagar" onclick="confirmarPagamento(${index})">${conta.pago ? 'Pago' : 'Pagar'}</button>
                 <button class="deletar" onclick="deletarConta(${index})">Deletar</button>
@@ -36,15 +43,6 @@ function atualizarCartoes() {
             </div>`;
         listaContasMobile.appendChild(novoCartao);
     });
-}
-
-// Formatar data
-function formatarData(data) {
-    const dataObj = new Date(data);  // Convertendo o valor para um objeto Date
-    const dia = String(dataObj.getDate()).padStart(2, '0');
-    const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
-    const ano = dataObj.getFullYear();
-    return `${dia}/${mes}/${ano}`;
 }
 
 // Confirmar pagamento
@@ -122,14 +120,6 @@ formConta.addEventListener("submit", (event) => {
         return;
     }
 
-    // Calcular a data da última parcela
-    const dataVencimentoInicial = new Date(dataVencimento);
-    dataVencimentoInicial.setDate(1); // Garantir que seja no primeiro dia do mês
-
-    const ultimaParcela = new Date(dataVencimentoInicial);
-    ultimaParcela.setMonth(ultimaParcela.getMonth() + parcelas - 1); // Última parcela com base nas parcelas
-    const ultimaParcelaStr = ultimaParcela.toISOString().split('T')[0]; // A data da última parcela no formato yyyy-mm-dd
-
     if (contaEditandoIndex !== null) {
         // Editar conta
         contas[contaEditandoIndex] = {
@@ -139,7 +129,6 @@ formConta.addEventListener("submit", (event) => {
             parcelas: parcelas,
             parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
             pago: contas[contaEditandoIndex].pago || false,
-            ultimaParcela: ultimaParcelaStr,  // A última parcela agora está fixa
         };
     } else {
         // Adicionar nova conta
@@ -150,7 +139,6 @@ formConta.addEventListener("submit", (event) => {
             parcelas: parcelas,
             parcelasPagas: 0,
             pago: false,
-            ultimaParcela: ultimaParcelaStr, // A última parcela agora está fixa
         });
     }
 
