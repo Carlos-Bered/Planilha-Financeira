@@ -29,15 +29,12 @@ function atualizarCartoes() {
 
         // Data de vencimento permanece fixa (sem alteração no dia)
         const dataVencimento = new Date(conta.vencimento);
-        dataVencimento.setMonth(dataVencimento.getMonth() + 1); // Avança o mês (só uma vez)
+        dataVencimento.setMonth(dataVencimento.getMonth() + 1); // Avança o mês mantendo o dia fixo
         conta.vencimento = dataVencimento.toISOString().split('T')[0];
-        
-        // Calcular a última parcela com base nas parcelas
-        let ultimaParcela = new Date(conta.vencimento);
-        ultimaParcela.setMonth(ultimaParcela.getMonth() + conta.parcelas - 1); // Avança os meses (depois que o vencimento já foi ajustado)
-        ultimaParcela.setDate(dataVencimento.getDate()); // O dia permanece fixo
 
-        // Formatando a última parcela
+        // Calcular a última parcela com base nas parcelas
+        const ultimaParcela = new Date(dataVencimento);
+        ultimaParcela.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // Avança os meses
         const ultimaParcelaFormatada = formatarData(ultimaParcela.toISOString().split('T')[0]);
 
         novoCartao.innerHTML = 
@@ -91,7 +88,7 @@ function deletarConta(index) {
 function editarConta(index) {
     const conta = contas[index];
     document.getElementById("nomeConta").value = conta.nome;
-    document.getElementById("dataVencimento").value = conta.vencimento; // Certifique-se de que a data está sendo atribuída corretamente
+    document.getElementById("dataVencimento").value = conta.vencimento;
     document.getElementById("valorTotal").value = conta.valor;
     document.getElementById("parcelamento").value = conta.parcelas;
     
@@ -137,7 +134,7 @@ formConta.addEventListener("submit", (event) => {
         // Editar conta
         contas[contaEditandoIndex] = {
             nome: nomeConta,
-            vencimento: dataVencimento,  // Garantir que a data seja atribuída corretamente
+            vencimento: dataVencimento,
             valor: valor,
             parcelas: parcelas,
             parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
@@ -147,7 +144,7 @@ formConta.addEventListener("submit", (event) => {
         // Adicionar nova conta
         contas.push({
             nome: nomeConta,
-            vencimento: dataVencimento,  // Garantir que a data seja atribuída corretamente
+            vencimento: dataVencimento,
             valor: valor,
             parcelas: parcelas,
             parcelasPagas: 0,
