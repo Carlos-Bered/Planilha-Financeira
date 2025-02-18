@@ -34,7 +34,8 @@ function atualizarCartoes() {
         conta.vencimento = dataVencimento.toISOString().split('T')[0];
         
         // Calcular a última parcela com base nas parcelas
-        ultimaParcela.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // Avança os meses
+        let ultimaParcela = new Date(conta.vencimento);
+        ultimaParcela.setMonth(ultimaParcela.getMonth() + conta.parcelas - 1); // Avança os meses
         ultimaParcela.setDate(dataVencimento.getDate()); // O dia permanece fixo
 
         // Formatando a última parcela
@@ -91,7 +92,7 @@ function deletarConta(index) {
 function editarConta(index) {
     const conta = contas[index];
     document.getElementById("nomeConta").value = conta.nome;
-    document.getElementById("dataVencimento").value = conta.vencimento;
+    document.getElementById("dataVencimento").value = conta.vencimento; // Certifique-se de que a data está sendo atribuída corretamente
     document.getElementById("valorTotal").value = conta.valor;
     document.getElementById("parcelamento").value = conta.parcelas;
     
@@ -137,7 +138,7 @@ formConta.addEventListener("submit", (event) => {
         // Editar conta
         contas[contaEditandoIndex] = {
             nome: nomeConta,
-            vencimento: dataVencimento,
+            vencimento: dataVencimento,  // Garantir que a data seja atribuída corretamente
             valor: valor,
             parcelas: parcelas,
             parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
@@ -147,7 +148,7 @@ formConta.addEventListener("submit", (event) => {
         // Adicionar nova conta
         contas.push({
             nome: nomeConta,
-            vencimento: dataVencimento,
+            vencimento: dataVencimento,  // Garantir que a data seja atribuída corretamente
             valor: valor,
             parcelas: parcelas,
             parcelasPagas: 0,
