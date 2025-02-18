@@ -40,7 +40,6 @@ function atualizarCartoes() {
     });
 }
 
-
 // Formatar data
 function formatarData(data) {
     const [ano, mes, dia] = data.split("-");
