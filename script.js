@@ -122,28 +122,22 @@ formConta.addEventListener("submit", (event) => {
 
     const valorParcela = valor / parcelas;  // Cálculo do valor de cada parcela
 
+    const novaConta = {
+        nome: nomeConta,
+        vencimento: dataVencimento,  // Certifique-se de que a data seja salva como string
+        valor: valor,
+        parcelas: parcelas,
+        valorParcela: valorParcela, // Salvar o valor da parcela
+        parcelasPagas: 0,
+        pago: false,
+    };
+
     if (contaEditandoIndex !== null) {
         // Editar conta
-        contas[contaEditandoIndex] = {
-            nome: nomeConta,
-            vencimento: dataVencimento,  // Certifique-se de que a data seja salva como string
-            valor: valor,
-            parcelas: parcelas,
-            valorParcela: valorParcela, // Salvar o valor da parcela
-            parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
-            pago: contas[contaEditandoIndex].pago || false,
-        };
+        contas[contaEditandoIndex] = novaConta;
     } else {
         // Adicionar nova conta
-        contas.push({
-            nome: nomeConta,
-            vencimento: dataVencimento,  // Certifique-se de que a data seja salva como string
-            valor: valor,
-            parcelas: parcelas,
-            valorParcela: valorParcela, // Salvar o valor da parcela
-            parcelasPagas: 0,
-            pago: false,
-        });
+        contas.push(novaConta);
     }
 
     // Atualizar o localStorage
