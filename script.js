@@ -27,10 +27,11 @@ function atualizarCartoes() {
         // Calcular o valor restante
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
 
-        // Calcular a data do vencimento ajustada para o mês seguinte, mas mantendo o dia
-        const dataVencimento = new Date(conta.vencimento);
-        dataVencimento.setMonth(dataVencimento.getMonth() + 1); // Avança um mês mantendo o dia fixo
-        const vencimentoFormatado = formatarData(dataVencimento.toISOString().split('T')[0]);
+        /// Calcular a data do vencimento ajustada para o mês de acordo com a quantidade de parcelas já pagas
+       const dataVencimento = new Date(conta.vencimento);
+       dataVencimento.setMonth(dataVencimento.getMonth() + conta.parcelasPagas); // Avança os meses conforme o número de parcelas pagas
+       const vencimentoFormatado = formatarData(dataVencimento.toISOString().split('T')[0]);
+
 
         // Calcular a última parcela (só para exibição)
         const ultimaParcela = new Date(dataVencimento);
