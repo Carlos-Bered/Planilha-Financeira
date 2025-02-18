@@ -27,10 +27,13 @@ function atualizarCartoes() {
         // Calcular o valor restante
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
 
-        // Manter a data de vencimento conforme o usuário escolheu
+        // A data de vencimento permanece fixa, sem alterações
         const dataVencimento = new Date(conta.vencimento);
-        dataVencimento.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // A data final de vencimento deve ser ajustada corretamente
-        const ultimaParcela = formatarData(dataVencimento.toISOString().split('T')[0]); // Data final de vencimento (fixa)
+        const ultimaParcela = new Date(dataVencimento);
+        ultimaParcela.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // Calcula a última parcela com base na data de vencimento
+
+        // Formatando a última parcela
+        const ultimaParcelaFormatada = formatarData(ultimaParcela.toISOString().split('T')[0]);
 
         novoCartao.innerHTML = 
             `<h3>${conta.nome}</h3>
@@ -40,7 +43,7 @@ function atualizarCartoes() {
             <p>Parcelas: ${conta.parcelas}</p>
             <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
             <p>Valor Restante: R$ ${valorRestante}</p>
-            <p>Última Parcela: ${ultimaParcela}</p>
+            <p>Última Parcela: ${ultimaParcelaFormatada}</p>
             <div class="acoes">
                 <button class="pagar" onclick="confirmarPagamento(${index})">${conta.pago ? 'Pago' : 'Pagar'}</button>
                 <button class="deletar" onclick="deletarConta(${index})">Deletar</button>
