@@ -39,10 +39,17 @@ if (dataVencimento.getDate() !== new Date(conta.vencimento).getDate()) {
 const vencimentoFormatado = formatarData(dataVencimento.toISOString().split('T')[0]);
 
 
-        // Calcular a última parcela (só para exibição)
-        const ultimaParcela = new Date(dataVencimento);
-        ultimaParcela.setMonth(dataVencimento.getMonth() + conta.parcelas - 1);
-        const ultimaParcelaFormatada = formatarData(ultimaParcela.toISOString().split('T')[0]);
+        // Calcular a última parcela com base nas parcelas
+const ultimaParcela = new Date(conta.vencimento);
+ultimaParcela.setMonth(ultimaParcela.getMonth() + conta.parcelas - 1); // Avança os meses conforme o número de parcelas
+
+// Garantir que o dia e mês permaneçam fixos
+if (ultimaParcela.getDate() !== new Date(conta.vencimento).getDate()) {
+    ultimaParcela.setDate(0); // Ajusta para o último dia do mês
+}
+
+const ultimaParcelaFormatada = formatarData(ultimaParcela.toISOString().split('T')[0]);
+
 
         novoCartao.innerHTML = 
             `<h3>${conta.nome}</h3>
