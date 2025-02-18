@@ -27,14 +27,12 @@ function atualizarCartoes() {
         // Calcular o valor restante
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
 
-        // Calcular a data do vencimento ajustada para o mês seguinte, mas mantendo o dia
-        const dataVencimento = new Date(conta.vencimento);
-        dataVencimento.setMonth(dataVencimento.getMonth() + 1); // Avança um mês mantendo o dia fixo
-        const vencimentoFormatado = formatarData(dataVencimento.toISOString().split('T')[0]);
+        // Vencimento não avança automaticamente
+        const vencimentoFormatado = formatarData(conta.vencimento);
 
         // Calcular a última parcela (só para exibição)
-        const ultimaParcela = new Date(dataVencimento);
-        ultimaParcela.setMonth(dataVencimento.getMonth() + conta.parcelas - 1);
+        const ultimaParcela = new Date(conta.vencimento);
+        ultimaParcela.setMonth(ultimaParcela.getMonth() + conta.parcelas - 1);
         const ultimaParcelaFormatada = formatarData(ultimaParcela.toISOString().split('T')[0]);
 
         novoCartao.innerHTML = 
@@ -65,6 +63,12 @@ function confirmarPagamento(index) {
         }
         if (conta.parcelasPagas === conta.parcelas) {
             conta.pago = true;
+        }
+        // Avançar o mês no vencimento ao pagar
+        if (conta.parcelasPagas < conta.parcelas) {
+            const vencimento = new Date(conta.vencimento);
+            vencimento.setMonth(vencimento.getMonth() + 1); // Avança um mês no vencimento após o pagamento
+            conta.vencimento = vencimento.toISOString().split('T')[0];
         }
         localStorage.setItem("contas", JSON.stringify(contas));
         atualizarCartoes();
