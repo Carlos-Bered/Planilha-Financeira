@@ -21,8 +21,8 @@ function atualizarCartoes() {
             `<h3>${conta.nome}</h3>
             <p>Vencimento: ${formatarData(conta.vencimento)}</p>
             <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
+            <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valorParcela).toFixed(2)}</p> <!-- Correção aqui -->
             <p>Parcelas: ${conta.parcelas}</p>
-            p>Valor de Cada Parcela: R$ ${parseFloat(conta.valorParcela).toFixed(2)}</p>
             <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
             <p>Valor Restante: R$ ${valorRestante}</p>
             <div class="acoes">
@@ -115,6 +115,8 @@ formConta.addEventListener("submit", (event) => {
         return;
     }
 
+    const valorParcela = valor / parcelas; // Calcular o valor de cada parcela
+
     if (contaEditandoIndex !== null) {
         // Editar conta
         contas[contaEditandoIndex] = {
@@ -122,6 +124,7 @@ formConta.addEventListener("submit", (event) => {
             vencimento: dataVencimento,
             valor: valor,
             parcelas: parcelas,
+            valorParcela: valorParcela, // Adicionar o valor da parcela
             parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
             pago: contas[contaEditandoIndex].pago || false,
         };
@@ -132,6 +135,7 @@ formConta.addEventListener("submit", (event) => {
             vencimento: dataVencimento,
             valor: valor,
             parcelas: parcelas,
+            valorParcela: valorParcela, // Adicionar o valor da parcela
             parcelasPagas: 0,
             pago: false,
         });
