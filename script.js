@@ -40,7 +40,6 @@ function atualizarCartoes() {
     });
 }
 
-const valorParcela = valor / parcelas;
 
 // Formatar data
 function formatarData(data) {
