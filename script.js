@@ -20,6 +20,11 @@ function atualizarCartoes() {
     contas.forEach((conta, index) => {
         const novoCartao = document.createElement("div");
         novoCartao.classList.add("card");
+        
+        // Calcular o valor de cada parcela
+        const valorParcela = (conta.valor / conta.parcelas).toFixed(2);
+
+        // Calcular o valor restante
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
 
         // Manter a data de vencimento conforme o usuário escolheu
@@ -31,7 +36,7 @@ function atualizarCartoes() {
             `<h3>${conta.nome}</h3>
             <p>Vencimento: ${formatarData(conta.vencimento)}</p>
             <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
-            <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valorParcela).toFixed(2)}</p>
+            <p>Valor de Cada Parcela: R$ ${valorParcela}</p>
             <p>Parcelas: ${conta.parcelas}</p>
             <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
             <p>Valor Restante: R$ ${valorRestante}</p>
