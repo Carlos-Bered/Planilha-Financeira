@@ -19,7 +19,7 @@ function atualizarCartoes() {
         // Calcular a data da última parcela
         const dataVencimento = new Date(conta.vencimento);
         dataVencimento.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // Adiciona o número de parcelas - 1
-        const ultimaParcela = formatarData(dataVencimento); // Formatar data da última parcela
+        const ultimaParcela = formatarData(dataVencimento); // Formatar data da última parcela (fixa)
 
         // Formatação da data
         novoCartao.innerHTML = 
@@ -55,9 +55,6 @@ function confirmarPagamento(index) {
     if (confirmar) {
         if (conta.parcelasPagas < conta.parcelas) {
             conta.parcelasPagas += 1;
-            const dataVencimento = new Date(conta.vencimento);
-            dataVencimento.setMonth(dataVencimento.getMonth() + 1);
-            conta.vencimento = dataVencimento.toISOString().split('T')[0];
         } 
         if (conta.parcelasPagas === conta.parcelas) {
             conta.pago = true;
