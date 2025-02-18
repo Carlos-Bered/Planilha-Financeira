@@ -20,20 +20,20 @@ function atualizarCartoes() {
     contas.forEach((conta, index) => {
         const novoCartao = document.createElement("div");
         novoCartao.classList.add("card");
-        
+
         // Calcular o valor de cada parcela
         const valorParcela = (conta.valor / conta.parcelas).toFixed(2);
 
         // Calcular o valor restante
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
 
-        // A data de vencimento permanece fixa, sem alterações
+        // Data de vencimento permanece fixa (sem alteração no dia)
         const dataVencimento = new Date(conta.vencimento);
         const ultimaParcela = new Date(dataVencimento);
         
-        // A última parcela é calculada com base no número de parcelas
-        ultimaParcela.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // Incrementa os meses
-        ultimaParcela.setDate(dataVencimento.getDate()); // Garante que o dia será o mesmo da data de vencimento
+        // Calcular a última parcela com base nas parcelas
+        ultimaParcela.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // Avança os meses
+        ultimaParcela.setDate(dataVencimento.getDate()); // O dia permanece fixo
 
         // Formatando a última parcela
         const ultimaParcelaFormatada = formatarData(ultimaParcela.toISOString().split('T')[0]);
