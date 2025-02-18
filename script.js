@@ -14,7 +14,7 @@ function atualizarCartoes() {
     contas.forEach((conta, index) => {
         const novoCartao = document.createElement("div");
         novoCartao.classList.add("card");
-        
+
         const valorRestante = (conta.valor - (conta.parcelasPagas * conta.valorParcela)).toFixed(2);
         
         // Calcular a data da última parcela fixa
@@ -131,8 +131,11 @@ formConta.addEventListener("submit", (event) => {
         return;
     }
 
-    // Calcular o valor de cada parcela
-    const valorParcela = (valor / parcelas).toFixed(2);
+    // Calcular o valor de cada parcela, garantindo que o valor total seja sempre dividido de forma justa
+    const valorParcela = (valor / parcelas).toFixed(2); // Valor fixo para todas as parcelas
+
+    // O valor da última parcela pode ter um pequeno arredondamento (se necessário), para garantir que a soma total seja correta
+    const ultimoValorParcela = (valor - (valorParcela * (parcelas - 1))).toFixed(2);
 
     if (contaEditandoIndex !== null) {
         // Editar conta
@@ -143,7 +146,8 @@ formConta.addEventListener("submit", (event) => {
             parcelas: parcelas,
             parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
             pago: contas[contaEditandoIndex].pago || false,
-            valorParcela: valorParcela // Valor fixo de cada parcela
+            valorParcela: valorParcela, // Valor fixo para as parcelas
+            ultimoValorParcela: ultimoValorParcela // Última parcela (fixa)
         };
     } else {
         // Adicionar nova conta
@@ -154,7 +158,8 @@ formConta.addEventListener("submit", (event) => {
             parcelas: parcelas,
             parcelasPagas: 0,
             pago: false,
-            valorParcela: valorParcela // Valor fixo de cada parcela
+            valorParcela: valorParcela, // Valor fixo para as parcelas
+            ultimoValorParcela: ultimoValorParcela // Última parcela (fixa)
         });
     }
 
