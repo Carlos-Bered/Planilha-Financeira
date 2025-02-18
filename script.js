@@ -29,7 +29,7 @@ function atualizarCartoes() {
             <p>Parcelas: ${conta.parcelas}</p>
             <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
             <p>Valor Restante: R$ ${valorRestante}</p>
-            <p>Última Parcela: ${ultimaParcela}</p> <!-- Data da última parcela -->
+            <p>Última Parcela: R$ ${conta.ultimaParcela}</p> <!-- Valor fixo da última parcela -->
             <div class="acoes">
                 <button class="pagar" onclick="confirmarPagamento(${index})">${conta.pago ? 'Pago' : 'Pagar'}</button>
                 <button class="deletar" onclick="deletarConta(${index})">Deletar</button>
@@ -134,7 +134,7 @@ formConta.addEventListener("submit", (event) => {
     // Calcular o valor de cada parcela, garantindo que o valor total seja sempre dividido de forma justa
     const valorParcela = (valor / parcelas).toFixed(2); // Valor fixo para todas as parcelas
 
-    // O valor da última parcela pode ter um pequeno arredondamento (se necessário), para garantir que a soma total seja correta
+    // A última parcela é fixa, e vamos apenas garantir que ela seja a diferença entre o valor total e o valor das parcelas anteriores
     const ultimoValorParcela = (valor - (valorParcela * (parcelas - 1))).toFixed(2);
 
     if (contaEditandoIndex !== null) {
@@ -147,7 +147,7 @@ formConta.addEventListener("submit", (event) => {
             parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
             pago: contas[contaEditandoIndex].pago || false,
             valorParcela: valorParcela, // Valor fixo para as parcelas
-            ultimoValorParcela: ultimoValorParcela // Última parcela (fixa)
+            ultimaParcela: ultimoValorParcela // Última parcela fixa
         };
     } else {
         // Adicionar nova conta
@@ -159,7 +159,7 @@ formConta.addEventListener("submit", (event) => {
             parcelasPagas: 0,
             pago: false,
             valorParcela: valorParcela, // Valor fixo para as parcelas
-            ultimoValorParcela: ultimoValorParcela // Última parcela (fixa)
+            ultimaParcela: ultimoValorParcela // Última parcela fixa
         });
     }
 
