@@ -8,6 +8,11 @@ const listaContasMobile = document.getElementById("listaContasMobile");
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
 let contaEditandoIndex = null;
 
+// Função para formatar valores como moeda brasileira (R$)
+function formatarMoeda(valor) {
+    return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
 // Formatar data no formato DD/MM/AAAA
 function formatarData(data) {
     const [ano, mes, dia] = data.split("-");
@@ -22,43 +27,41 @@ function atualizarCartoes() {
         novoCartao.classList.add("card");
 
         // Calcular o valor de cada parcela
-        const valorParcela = (conta.valor / conta.parcelas).toFixed(2);
+        const valorParcela = conta.valor / conta.parcelas;
 
         // Calcular o valor restante
-        const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
+        const valorRestante = conta.valor - (conta.parcelasPagas * valorParcela);
 
-       // Calcular a data do vencimento ajustada para o mês de acordo com a quantidade de parcelas já pagas
-const dataVencimento = new Date(conta.vencimento);
-dataVencimento.setMonth(dataVencimento.getMonth() + conta.parcelasPagas); // Avança os meses conforme o número de parcelas pagas
+        // Calcular a data do vencimento ajustada para o mês de acordo com a quantidade de parcelas já pagas
+        const dataVencimento = new Date(conta.vencimento);
+        dataVencimento.setMonth(dataVencimento.getMonth() + conta.parcelasPagas);
 
-// Garantir que o dia permaneça fixo, mesmo que o mês tenha menos dias
-if (dataVencimento.getDate() !== new Date(conta.vencimento).getDate()) {
-    dataVencimento.setDate(0); // Volta para o último dia do mês
-}
+        // Garantir que o dia permaneça fixo, mesmo que o mês tenha menos dias
+        if (dataVencimento.getDate() !== new Date(conta.vencimento).getDate()) {
+            dataVencimento.setDate(0); // Volta para o último dia do mês
+        }
 
-const vencimentoFormatado = formatarData(dataVencimento.toISOString().split('T')[0]);
-
+        const vencimentoFormatado = formatarData(dataVencimento.toISOString().split('T')[0]);
 
         // Calcular a última parcela com base nas parcelas
-const ultimaParcela = new Date(conta.vencimento);
-ultimaParcela.setMonth(ultimaParcela.getMonth() + conta.parcelas - 1); // Avança os meses conforme o número de parcelas
+        const ultimaParcela = new Date(conta.vencimento);
+        ultimaParcela.setMonth(ultimaParcela.getMonth() + conta.parcelas - 1);
 
-// Garantir que o dia e mês permaneçam fixos
-if (ultimaParcela.getDate() !== new Date(conta.vencimento).getDate()) {
-    ultimaParcela.setDate(0); // Ajusta para o último dia do mês
-}
+        // Garantir que o dia e mês permaneçam fixos
+        if (ultimaParcela.getDate() !== new Date(conta.vencimento).getDate()) {
+            ultimaParcela.setDate(0);
+        }
 
-const ultimaParcelaFormatada = formatarData(ultimaParcela.toISOString().split('T')[0]);
-
+        const ultimaParcelaFormatada = formatarData(ultimaParcela.toISOString().split('T')[0]);
 
         novoCartao.innerHTML = 
             `<h3>${conta.nome}</h3>
             <p>Vencimento: ${vencimentoFormatado}</p>
-            <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
-            <p>Valor de Cada Parcela: R$ ${valorParcela}</p>
+            <p>Valor Total: ${formatarMoeda(conta.valor)}</p>
+            <p>Valor de Cada Parcela: ${formatarMoeda(valorParcela)}</p>
             <p>Parcelas: ${conta.parcelas}</p>
             <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
-            <p>Valor Restante: R$ ${valorRestante}</p>
+            <p>Valor Restante: ${formatarMoeda(valorRestante)}</p>
             <p>Última Parcela: ${ultimaParcelaFormatada}</p>
             <div class="acoes">
                 <button class="pagar" onclick="confirmarPagamento(${index})">${conta.pago ? 'Pago' : 'Pagar'}</button>
@@ -100,7 +103,7 @@ function editarConta(index) {
     const conta = contas[index];
     document.getElementById("nomeConta").value = conta.nome;
     document.getElementById("dataVencimento").value = conta.vencimento;
-    document.getElementById("valorTotal").value = conta.valor.toFixed(2).replace(".", ","); // Formatar para exibir com vírgula
+    document.getElementById("valorTotal").value = conta.valor.toFixed(2).replace(".", ","); // Exibir com vírgula
     document.getElementById("parcelamento").value = conta.parcelas;
     
     contaEditandoIndex = index; 
@@ -132,7 +135,7 @@ formConta.addEventListener("submit", (event) => {
 
     const nomeConta = document.getElementById("nomeConta").value.trim();
     const dataVencimento = document.getElementById("dataVencimento").value;
-    const valor = parseFloat(document.getElementById("valorTotal").value.replace(",", ".")); // Substitui vírgula por ponto para garantir o formato correto
+    const valor = parseFloat(document.getElementById("valorTotal").value.replace(",", ".")); // Converter vírgula para ponto
     const parcelas = parseInt(document.getElementById("parcelamento").value);
 
     // Verificação dos dados
