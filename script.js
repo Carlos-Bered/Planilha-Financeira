@@ -14,12 +14,12 @@ function atualizarCartoes() {
     contas.forEach((conta, index) => {
         const novoCartao = document.createElement("div");
         novoCartao.classList.add("card");
-        const valorRestante = (conta.valor - (conta.parcelasPagas * conta.valorParcela)).toFixed(2);
-        
+        const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
+
         // Calcular a data da última parcela
         const dataVencimento = new Date(conta.vencimento);
         dataVencimento.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // Adiciona o número de parcelas - 1
-        const ultimaParcela = formatarData(dataVencimento); // Formatar data da última parcela (fixa)
+        const ultimaParcela = formatarData(dataVencimento.toISOString().split('T')[0]); // Formatar data da última parcela
 
         // Formatação da data
         novoCartao.innerHTML = 
@@ -42,6 +42,11 @@ function atualizarCartoes() {
 
 // Formatar data
 function formatarData(data) {
+    // Se a data for uma string no formato "YYYY-MM-DD", converte para um objeto Date
+    if (typeof data === 'string') {
+        data = new Date(data); // Converte a string para um objeto Date
+    }
+
     const dia = String(data.getDate()).padStart(2, '0');
     const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses começam de 0
     const ano = data.getFullYear();
@@ -55,6 +60,9 @@ function confirmarPagamento(index) {
     if (confirmar) {
         if (conta.parcelasPagas < conta.parcelas) {
             conta.parcelasPagas += 1;
+            const dataVencimento = new Date(conta.vencimento);
+            dataVencimento.setMonth(dataVencimento.getMonth() + 1);
+            conta.vencimento = dataVencimento.toISOString().split('T')[0];
         } 
         if (conta.parcelasPagas === conta.parcelas) {
             conta.pago = true;
@@ -120,24 +128,26 @@ formConta.addEventListener("submit", (event) => {
         return;
     }
 
-    const valorParcela = valor / parcelas;  // Cálculo do valor de cada parcela
-
-    const novaConta = {
-        nome: nomeConta,
-        vencimento: dataVencimento,  // Certifique-se de que a data seja salva como string
-        valor: valor,
-        parcelas: parcelas,
-        valorParcela: valorParcela, // Salvar o valor da parcela
-        parcelasPagas: 0,
-        pago: false,
-    };
-
     if (contaEditandoIndex !== null) {
         // Editar conta
-        contas[contaEditandoIndex] = novaConta;
+        contas[contaEditandoIndex] = {
+            nome: nomeConta,
+            vencimento: dataVencimento,
+            valor: valor,
+            parcelas: parcelas,
+            parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
+            pago: contas[contaEditandoIndex].pago || false,
+        };
     } else {
         // Adicionar nova conta
-        contas.push(novaConta);
+        contas.push({
+            nome: nomeConta,
+            vencimento: dataVencimento,
+            valor: valor,
+            parcelas: parcelas,
+            parcelasPagas: 0,
+            pago: false,
+        });
     }
 
     // Atualizar o localStorage
