@@ -14,17 +14,21 @@ function atualizarCartoes() {
     contas.forEach((conta, index) => {
         const novoCartao = document.createElement("div");
         novoCartao.classList.add("card");
+        const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
         
-        const valorRestante = (conta.valor - (conta.parcelasPagas * conta.valorParcela)).toFixed(2);
-        
+        // Calcular a data da última parcela (fixa)
+        const ultimaParcela = formatarData(conta.ultimaParcela); // Última parcela fixada
+
+        // Formatação do cartão
         novoCartao.innerHTML = 
             `<h3>${conta.nome}</h3>
             <p>Vencimento: ${formatarData(conta.vencimento)}</p>
             <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
-            <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valorParcela).toFixed(2)}</p>
+            <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valor / conta.parcelas).toFixed(2)}</p>
             <p>Parcelas: ${conta.parcelas}</p>
             <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
             <p>Valor Restante: R$ ${valorRestante}</p>
+            <p>Última Parcela: ${ultimaParcela}</p> <!-- Data da última parcela fixada -->
             <div class="acoes">
                 <button class="pagar" onclick="confirmarPagamento(${index})">${conta.pago ? 'Pago' : 'Pagar'}</button>
                 <button class="deletar" onclick="deletarConta(${index})">Deletar</button>
@@ -34,11 +38,12 @@ function atualizarCartoes() {
     });
 }
 
-// Função para formatar a data
+// Formatar data
 function formatarData(data) {
-    const dia = String(data.getDate()).padStart(2, '0');
-    const mes = String(data.getMonth() + 1).padStart(2, '0');
-    const ano = data.getFullYear();
+    const dataObj = new Date(data);  // Convertendo o valor para um objeto Date
+    const dia = String(dataObj.getDate()).padStart(2, '0');
+    const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
+    const ano = dataObj.getFullYear();
     return `${dia}/${mes}/${ano}`;
 }
 
@@ -49,17 +54,13 @@ function confirmarPagamento(index) {
     if (confirmar) {
         if (conta.parcelasPagas < conta.parcelas) {
             conta.parcelasPagas += 1;
-            
-            // Calcular o próximo vencimento
             const dataVencimento = new Date(conta.vencimento);
-            dataVencimento.setMonth(dataVencimento.getMonth() + 1); // Aumenta um mês no vencimento
+            dataVencimento.setMonth(dataVencimento.getMonth() + 1);
             conta.vencimento = dataVencimento.toISOString().split('T')[0];
         } 
-
         if (conta.parcelasPagas === conta.parcelas) {
             conta.pago = true;
         }
-
         localStorage.setItem("contas", JSON.stringify(contas));
         atualizarCartoes();
     }
@@ -121,8 +122,9 @@ formConta.addEventListener("submit", (event) => {
         return;
     }
 
-    // Calcular o valor de cada parcela
-    const valorParcela = (valor / parcelas).toFixed(2); // Valor fixo para todas as parcelas
+    const dataUltimaParcela = new Date(dataVencimento);
+    dataUltimaParcela.setMonth(dataUltimaParcela.getMonth() + parcelas - 1);
+    const ultimaParcela = dataUltimaParcela.toISOString().split('T')[0]; // Data da última parcela (fixa)
 
     if (contaEditandoIndex !== null) {
         // Editar conta
@@ -133,7 +135,7 @@ formConta.addEventListener("submit", (event) => {
             parcelas: parcelas,
             parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
             pago: contas[contaEditandoIndex].pago || false,
-            valorParcela: valorParcela
+            ultimaParcela: ultimaParcela, // Definindo a última parcela
         };
     } else {
         // Adicionar nova conta
@@ -144,7 +146,7 @@ formConta.addEventListener("submit", (event) => {
             parcelas: parcelas,
             parcelasPagas: 0,
             pago: false,
-            valorParcela: valorParcela
+            ultimaParcela: ultimaParcela, // Definindo a última parcela
         });
     }
 
