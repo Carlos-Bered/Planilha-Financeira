@@ -122,15 +122,20 @@ formConta.addEventListener("submit", (event) => {
         return;
     }
 
-    const dataUltimaParcela = new Date(dataVencimento);
-    dataUltimaParcela.setMonth(dataUltimaParcela.getMonth() + parcelas - 1);
+    // Ajustando a data de vencimento inicial para o primeiro dia do mês
+    const dataVencimentoInicio = new Date(dataVencimento);
+    dataVencimentoInicio.setDate(1); // Garantir que o dia seja o 1º do mês
+
+    // Calcular a última parcela fixada
+    const dataUltimaParcela = new Date(dataVencimentoInicio);
+    dataUltimaParcela.setMonth(dataUltimaParcela.getMonth() + parcelas - 1); // A última parcela é no mês correto
     const ultimaParcela = dataUltimaParcela.toISOString().split('T')[0]; // Data da última parcela (fixa)
 
     if (contaEditandoIndex !== null) {
         // Editar conta
         contas[contaEditandoIndex] = {
             nome: nomeConta,
-            vencimento: dataVencimento,
+            vencimento: dataVencimentoInicio.toISOString().split('T')[0], // A data de vencimento agora é corrigida
             valor: valor,
             parcelas: parcelas,
             parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
@@ -141,7 +146,7 @@ formConta.addEventListener("submit", (event) => {
         // Adicionar nova conta
         contas.push({
             nome: nomeConta,
-            vencimento: dataVencimento,
+            vencimento: dataVencimentoInicio.toISOString().split('T')[0], // A data de vencimento agora é corrigida
             valor: valor,
             parcelas: parcelas,
             parcelasPagas: 0,
