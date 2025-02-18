@@ -16,7 +16,7 @@ function atualizarCartoes() {
         novoCartao.classList.add("card");
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
 
-        // Calcular a data da última parcela (fixa)
+        // Calcular a data da última parcela fixa
         const ultimaParcela = calcularUltimaParcela(conta.vencimento, conta.parcelas);
 
         // Formatação da data
@@ -24,7 +24,7 @@ function atualizarCartoes() {
             `<h3>${conta.nome}</h3>
             <p>Vencimento: ${formatarData(conta.vencimento)}</p>
             <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
-            <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valorParcela).toFixed(2)}</p>
+            <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valor / conta.parcelas).toFixed(2)}</p>
             <p>Parcelas: ${conta.parcelas}</p>
             <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
             <p>Valor Restante: R$ ${valorRestante}</p>
@@ -50,7 +50,7 @@ function formatarData(data) {
     return `${dia}/${mes}/${ano}`;
 }
 
-// Calcular a data da última parcela (fixa)
+// Calcular a data da última parcela fixa
 function calcularUltimaParcela(dataVencimento, parcelas) {
     const data = new Date(dataVencimento);
     data.setMonth(data.getMonth() + parcelas - 1); // Adiciona o número de parcelas - 1
@@ -64,9 +64,6 @@ function confirmarPagamento(index) {
     if (confirmar) {
         if (conta.parcelasPagas < conta.parcelas) {
             conta.parcelasPagas += 1;
-            const dataVencimento = new Date(conta.vencimento);
-            dataVencimento.setMonth(dataVencimento.getMonth() + 1);
-            conta.vencimento = dataVencimento.toISOString().split('T')[0];
         } 
         if (conta.parcelasPagas === conta.parcelas) {
             conta.pago = true;
