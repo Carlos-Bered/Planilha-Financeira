@@ -19,15 +19,15 @@ function atualizarCartoes() {
         // Calcular a data da última parcela
         const dataVencimento = new Date(conta.vencimento);
         dataVencimento.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // Adiciona o número de parcelas - 1
-        const ultimaParcela = formatarData(dataVencimento.toISOString().split('T')[0]); // Formatar data da última parcela
+        const ultimaParcela = formatarData(dataVencimento); // Formatar data da última parcela
 
         // Formatação da data
         novoCartao.innerHTML = 
             `<h3>${conta.nome}</h3>
             <p>Vencimento: ${formatarData(conta.vencimento)}</p>
             <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
-            <p>Parcelas: ${conta.parcelas}</p>
             <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valorParcela).toFixed(2)}</p>
+            <p>Parcelas: ${conta.parcelas}</p>
             <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
             <p>Valor Restante: R$ ${valorRestante}</p>
             <p>Última Parcela: ${ultimaParcela}</p> <!-- Data da última parcela -->
@@ -42,7 +42,9 @@ function atualizarCartoes() {
 
 // Formatar data
 function formatarData(data) {
-    const [ano, mes, dia] = data.split("-");
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses começam de 0
+    const ano = data.getFullYear();
     return `${dia}/${mes}/${ano}`;
 }
 
