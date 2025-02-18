@@ -100,7 +100,7 @@ function editarConta(index) {
     const conta = contas[index];
     document.getElementById("nomeConta").value = conta.nome;
     document.getElementById("dataVencimento").value = conta.vencimento;
-    document.getElementById("valorTotal").value = conta.valor;
+    document.getElementById("valorTotal").value = conta.valor.toFixed(2).replace(".", ","); // Formatar para exibir com vírgula
     document.getElementById("parcelamento").value = conta.parcelas;
     
     contaEditandoIndex = index; 
@@ -132,7 +132,7 @@ formConta.addEventListener("submit", (event) => {
 
     const nomeConta = document.getElementById("nomeConta").value.trim();
     const dataVencimento = document.getElementById("dataVencimento").value;
-    const valor = parseFloat(document.getElementById("valorTotal").value.replace(",", "."));
+    const valor = parseFloat(document.getElementById("valorTotal").value.replace(",", ".")); // Substitui vírgula por ponto para garantir o formato correto
     const parcelas = parseInt(document.getElementById("parcelamento").value);
 
     // Verificação dos dados
