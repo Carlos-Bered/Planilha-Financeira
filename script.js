@@ -16,8 +16,8 @@ function atualizarCartoes() {
         novoCartao.classList.add("card");
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
         
-        // Calcular a data da última parcela (fixa)
-        const ultimaParcela = formatarData(conta.ultimaParcela); // Última parcela fixada
+        // Data fixa da última parcela
+        const ultimaParcela = formatarData(conta.ultimaParcela);
 
         // Formatação do cartão
         novoCartao.innerHTML = 
@@ -122,36 +122,35 @@ formConta.addEventListener("submit", (event) => {
         return;
     }
 
-    // Ajustando a data de vencimento inicial para o primeiro dia do mês
-    const dataVencimentoInicio = new Date(dataVencimento);
-    dataVencimentoInicio.setDate(1); // Garantir que o dia seja o 1º do mês
+    // Calcular a data da última parcela
+    const dataVencimentoInicial = new Date(dataVencimento);
+    dataVencimentoInicial.setDate(1); // Garantir que seja no primeiro dia do mês
 
-    // Calcular a última parcela fixada
-    const dataUltimaParcela = new Date(dataVencimentoInicio);
-    dataUltimaParcela.setMonth(dataUltimaParcela.getMonth() + parcelas - 1); // A última parcela é no mês correto
-    const ultimaParcela = dataUltimaParcela.toISOString().split('T')[0]; // Data da última parcela (fixa)
+    const ultimaParcela = new Date(dataVencimentoInicial);
+    ultimaParcela.setMonth(ultimaParcela.getMonth() + parcelas - 1);
+    const ultimaParcelaStr = ultimaParcela.toISOString().split('T')[0]; // A data da última parcela no formato yyyy-mm-dd
 
     if (contaEditandoIndex !== null) {
         // Editar conta
         contas[contaEditandoIndex] = {
             nome: nomeConta,
-            vencimento: dataVencimentoInicio.toISOString().split('T')[0], // A data de vencimento agora é corrigida
+            vencimento: dataVencimento,
             valor: valor,
             parcelas: parcelas,
             parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
             pago: contas[contaEditandoIndex].pago || false,
-            ultimaParcela: ultimaParcela, // Definindo a última parcela
+            ultimaParcela: ultimaParcelaStr,
         };
     } else {
         // Adicionar nova conta
         contas.push({
             nome: nomeConta,
-            vencimento: dataVencimentoInicio.toISOString().split('T')[0], // A data de vencimento agora é corrigida
+            vencimento: dataVencimento,
             valor: valor,
             parcelas: parcelas,
             parcelasPagas: 0,
             pago: false,
-            ultimaParcela: ultimaParcela, // Definindo a última parcela
+            ultimaParcela: ultimaParcelaStr,
         });
     }
 
