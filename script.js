@@ -8,7 +8,7 @@ const listaContasMobile = document.getElementById("listaContasMobile");
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
 let contaEditandoIndex = null;
 
-// Formatar data
+// Formatar data no formato DD/MM/AAAA
 function formatarData(data) {
     const [ano, mes, dia] = data.split("-");
     return `${dia}/${mes}/${ano}`;
@@ -27,19 +27,19 @@ function atualizarCartoes() {
         // Calcular o valor restante
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
 
-        // Data de vencimento permanece fixa (sem alteração no dia)
+        // Calcular a data do vencimento ajustada para o mês seguinte, mas mantendo o dia
         const dataVencimento = new Date(conta.vencimento);
-        dataVencimento.setMonth(dataVencimento.getMonth() + 1); // Avança o mês mantendo o dia fixo
-        conta.vencimento = dataVencimento.toISOString().split('T')[0];
+        dataVencimento.setMonth(dataVencimento.getMonth() + 1); // Avança um mês mantendo o dia fixo
+        const vencimentoFormatado = formatarData(dataVencimento.toISOString().split('T')[0]);
 
-        // Calcular a última parcela com base nas parcelas
+        // Calcular a última parcela (só para exibição)
         const ultimaParcela = new Date(dataVencimento);
-        ultimaParcela.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // Avança os meses
+        ultimaParcela.setMonth(dataVencimento.getMonth() + conta.parcelas - 1);
         const ultimaParcelaFormatada = formatarData(ultimaParcela.toISOString().split('T')[0]);
 
         novoCartao.innerHTML = 
             `<h3>${conta.nome}</h3>
-            <p>Vencimento: ${formatarData(conta.vencimento)}</p>
+            <p>Vencimento: ${vencimentoFormatado}</p>
             <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
             <p>Valor de Cada Parcela: R$ ${valorParcela}</p>
             <p>Parcelas: ${conta.parcelas}</p>
@@ -62,10 +62,7 @@ function confirmarPagamento(index) {
     if (confirmar) {
         if (conta.parcelasPagas < conta.parcelas) {
             conta.parcelasPagas += 1;
-            const dataVencimento = new Date(conta.vencimento);
-            dataVencimento.setMonth(dataVencimento.getMonth() + 1); // Avança o mês
-            conta.vencimento = dataVencimento.toISOString().split('T')[0];
-        } 
+        }
         if (conta.parcelasPagas === conta.parcelas) {
             conta.pago = true;
         }
