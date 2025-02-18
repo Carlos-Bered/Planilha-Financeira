@@ -30,9 +30,9 @@ function atualizarCartoes() {
         // Vencimento não avança automaticamente
         const vencimentoFormatado = formatarData(conta.vencimento);
 
-        // Calcular a última parcela (só para exibição)
+        // Calcular a última parcela com base no vencimento e no número de parcelas
         const ultimaParcela = new Date(conta.vencimento);
-        ultimaParcela.setMonth(ultimaParcela.getMonth() + conta.parcelas - 1);
+        ultimaParcela.setMonth(ultimaParcela.getMonth() + conta.parcelas - 1); // Avançando o mês de acordo com o número de parcelas
         const ultimaParcelaFormatada = formatarData(ultimaParcela.toISOString().split('T')[0]);
 
         novoCartao.innerHTML = 
