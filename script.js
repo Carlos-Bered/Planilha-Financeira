@@ -132,7 +132,7 @@ formConta.addEventListener("submit", (event) => {
 
     const nomeConta = document.getElementById("nomeConta").value.trim();
     const dataVencimento = document.getElementById("dataVencimento").value;
-    const valor = parseFloat(document.getElementById("valorTotal").value);
+    const valor = parseFloat(document.getElementById("valorTotal").value.replace(",", "."));
     const parcelas = parseInt(document.getElementById("parcelamento").value);
 
     // Verificação dos dados
