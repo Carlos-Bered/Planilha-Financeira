@@ -16,7 +16,7 @@ function atualizarCartoes() {
         novoCartao.classList.add("card");
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
         
-        // Data fixa da última parcela
+        // A data da última parcela permanece fixa
         const ultimaParcela = formatarData(conta.ultimaParcela);
 
         // Formatação do cartão
@@ -28,7 +28,7 @@ function atualizarCartoes() {
             <p>Parcelas: ${conta.parcelas}</p>
             <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
             <p>Valor Restante: R$ ${valorRestante}</p>
-            <p>Última Parcela: ${ultimaParcela}</p> <!-- Data da última parcela fixada -->
+            <p>Última Parcela: ${ultimaParcela}</p> <!-- Data da última parcela fixa -->
             <div class="acoes">
                 <button class="pagar" onclick="confirmarPagamento(${index})">${conta.pago ? 'Pago' : 'Pagar'}</button>
                 <button class="deletar" onclick="deletarConta(${index})">Deletar</button>
@@ -127,7 +127,7 @@ formConta.addEventListener("submit", (event) => {
     dataVencimentoInicial.setDate(1); // Garantir que seja no primeiro dia do mês
 
     const ultimaParcela = new Date(dataVencimentoInicial);
-    ultimaParcela.setMonth(ultimaParcela.getMonth() + parcelas - 1);
+    ultimaParcela.setMonth(ultimaParcela.getMonth() + parcelas - 1); // Última parcela com base nas parcelas
     const ultimaParcelaStr = ultimaParcela.toISOString().split('T')[0]; // A data da última parcela no formato yyyy-mm-dd
 
     if (contaEditandoIndex !== null) {
@@ -139,7 +139,7 @@ formConta.addEventListener("submit", (event) => {
             parcelas: parcelas,
             parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
             pago: contas[contaEditandoIndex].pago || false,
-            ultimaParcela: ultimaParcelaStr,
+            ultimaParcela: ultimaParcelaStr,  // A última parcela agora está fixa
         };
     } else {
         // Adicionar nova conta
@@ -150,7 +150,7 @@ formConta.addEventListener("submit", (event) => {
             parcelas: parcelas,
             parcelasPagas: 0,
             pago: false,
-            ultimaParcela: ultimaParcelaStr,
+            ultimaParcela: ultimaParcelaStr, // A última parcela agora está fixa
         });
     }
 
