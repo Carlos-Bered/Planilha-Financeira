@@ -126,7 +126,7 @@ formConta.addEventListener("submit", (event) => {
         // Editar conta
         contas[contaEditandoIndex] = {
             nome: nomeConta,
-            vencimento: dataVencimento,
+            vencimento: dataVencimento,  // Certifique-se de que a data seja salva como string
             valor: valor,
             parcelas: parcelas,
             valorParcela: valorParcela, // Salvar o valor da parcela
@@ -137,7 +137,7 @@ formConta.addEventListener("submit", (event) => {
         // Adicionar nova conta
         contas.push({
             nome: nomeConta,
-            vencimento: dataVencimento,
+            vencimento: dataVencimento,  // Certifique-se de que a data seja salva como string
             valor: valor,
             parcelas: parcelas,
             valorParcela: valorParcela, // Salvar o valor da parcela
