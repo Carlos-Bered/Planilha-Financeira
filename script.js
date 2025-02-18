@@ -14,7 +14,7 @@ function atualizarCartoes() {
     contas.forEach((conta, index) => {
         const novoCartao = document.createElement("div");
         novoCartao.classList.add("card");
-        const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
+        const valorRestante = (conta.valor - (conta.parcelasPagas * conta.valorParcela)).toFixed(2);
         
         // Calcular a data da última parcela
         const dataVencimento = new Date(conta.vencimento);
