@@ -1,4 +1,3 @@
-// Variáveis
 const btnAdicionar = document.getElementById("adicionarConta");
 const modal = document.getElementById("modal");
 const fechar = document.querySelector(".fechar");
@@ -8,47 +7,38 @@ const listaContasMobile = document.getElementById("listaContasMobile");
 let contas = JSON.parse(localStorage.getItem("contas")) || [];
 let contaEditandoIndex = null;
 
-// Função para formatar valores como moeda brasileira (R$)
 function formatarMoeda(valor) {
     return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
-// Formatar data no formato DD/MM/AAAA
 function formatarData(data) {
     const [ano, mes, dia] = data.split("-");
     return `${dia}/${mes}/${ano}`;
 }
 
-// Atualiza os cartões de contas
 function atualizarCartoes() {
-    listaContasMobile.innerHTML = ''; // Limpa os cartões
+    listaContasMobile.innerHTML = ''; 
     contas.forEach((conta, index) => {
         const novoCartao = document.createElement("div");
         novoCartao.classList.add("card");
 
-        // Calcular o valor de cada parcela
-        const valorParcela = conta.valor / conta.parcelas;
+                const valorParcela = conta.valor / conta.parcelas;
 
-        // Calcular o valor restante
-        const valorRestante = conta.valor - (conta.parcelasPagas * valorParcela);
+                const valorRestante = conta.valor - (conta.parcelasPagas * valorParcela);
 
-        // Calcular a data do vencimento ajustada para o mês de acordo com a quantidade de parcelas já pagas
-        const dataVencimento = new Date(conta.vencimento);
+                const dataVencimento = new Date(conta.vencimento);
         dataVencimento.setMonth(dataVencimento.getMonth() + conta.parcelasPagas);
 
-        // Garantir que o dia permaneça fixo, mesmo que o mês tenha menos dias
         if (dataVencimento.getDate() !== new Date(conta.vencimento).getDate()) {
             dataVencimento.setDate(0); // Volta para o último dia do mês
         }
 
         const vencimentoFormatado = formatarData(dataVencimento.toISOString().split('T')[0]);
 
-        // Calcular a última parcela com base nas parcelas
-        const ultimaParcela = new Date(conta.vencimento);
+              const ultimaParcela = new Date(conta.vencimento);
         ultimaParcela.setMonth(ultimaParcela.getMonth() + conta.parcelas - 1);
 
-        // Garantir que o dia e mês permaneçam fixos
-        if (ultimaParcela.getDate() !== new Date(conta.vencimento).getDate()) {
+               if (ultimaParcela.getDate() !== new Date(conta.vencimento).getDate()) {
             ultimaParcela.setDate(0);
         }
 
@@ -72,7 +62,6 @@ function atualizarCartoes() {
     });
 }
 
-// Confirmar pagamento
 function confirmarPagamento(index) {
     const conta = contas[index];
     const confirmar = confirm("Tem certeza de que deseja pagar esta conta?");
@@ -88,7 +77,6 @@ function confirmarPagamento(index) {
     }
 }
 
-// Deletar conta
 function deletarConta(index) {
     const confirmar = confirm("Tem certeza de que deseja deletar esta conta?");
     if (confirmar) {
@@ -98,7 +86,6 @@ function deletarConta(index) {
     }
 }
 
-// Editar conta
 function editarConta(index) {
     const conta = contas[index];
     document.getElementById("nomeConta").value = conta.nome;
@@ -110,42 +97,37 @@ function editarConta(index) {
     modal.style.display = "flex";
 }
 
-// Abrir o modal
 btnAdicionar.addEventListener("click", () => {
     contaEditandoIndex = null;
     formConta.reset();
     modal.style.display = "flex";
 });
 
-// Fechar o modal clicando no botão de fechar
 fechar.addEventListener("click", () => {
     modal.style.display = "none";
 });
 
-// Fechar o modal clicando fora dele
 window.addEventListener("click", (e) => {
     if (e.target === modal) {
         modal.style.display = "none";
     }
 });
 
-// Salvar conta ao submeter o formulário
 formConta.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const nomeConta = document.getElementById("nomeConta").value.trim();
     const dataVencimento = document.getElementById("dataVencimento").value;
-    const valor = parseFloat(document.getElementById("valorTotal").value.replace(",", ".")); // Converter vírgula para ponto
+    const valor = parseFloat(document.getElementById("valorTotal").value.replace(",", ".")); 
     const parcelas = parseInt(document.getElementById("parcelamento").value);
 
-    // Verificação dos dados
     if (!nomeConta || !dataVencimento || isNaN(valor) || isNaN(parcelas) || parcelas <= 0) {
         alert("Por favor, preencha todos os campos corretamente!");
         return;
     }
 
     if (contaEditandoIndex !== null) {
-        // Editar conta
+        
         contas[contaEditandoIndex] = {
             nome: nomeConta,
             vencimento: dataVencimento,
@@ -155,7 +137,7 @@ formConta.addEventListener("submit", (event) => {
             pago: contas[contaEditandoIndex].pago || false,
         };
     } else {
-        // Adicionar nova conta
+        
         contas.push({
             nome: nomeConta,
             vencimento: dataVencimento,
@@ -166,11 +148,11 @@ formConta.addEventListener("submit", (event) => {
         });
     }
 
-    // Atualizar o localStorage
+    
     localStorage.setItem("contas", JSON.stringify(contas));
     atualizarCartoes();
-    modal.style.display = "none";  // Fechar modal
+    modal.style.display = "none";  
     formConta.reset();
 });
 
-atualizarCartoes(); // Inicializa os cartões de contas
+atualizarCartoes(); 
