@@ -38,23 +38,17 @@ function atualizarCartoes() {
     });
 }
 
-// Formatar data
-function formatarData(data) {
-    if (typeof data === 'string') {
-        data = new Date(data);
-    }
-
-    const dia = String(data.getDate()).padStart(2, '0');
-    const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses começam de 0
-    const ano = data.getFullYear();
-    return `${dia}/${mes}/${ano}`;
+// Função para calcular a data da última parcela
+function calcularUltimaParcela(vencimento, parcelas) {
+    const dataVencimento = new Date(vencimento);
+    dataVencimento.setMonth(dataVencimento.getMonth() + parcelas - 1); // A última parcela será o vencimento + número de parcelas - 1
+    return formatarData(dataVencimento.toISOString().split('T')[0]);
 }
 
-// Calcular a data da última parcela fixa
-function calcularUltimaParcela(dataVencimento, parcelas) {
-    const data = new Date(dataVencimento);
-    data.setMonth(data.getMonth() + parcelas - 1); // Adiciona o número de parcelas - 1
-    return formatarData(data); // Formata a data de vencimento final
+// Formatar data
+function formatarData(data) {
+    const [ano, mes, dia] = data.split("-");
+    return `${dia}/${mes}/${ano}`;
 }
 
 // Confirmar pagamento
@@ -64,10 +58,17 @@ function confirmarPagamento(index) {
     if (confirmar) {
         if (conta.parcelasPagas < conta.parcelas) {
             conta.parcelasPagas += 1;
+            
+            // Calcular o próximo vencimento
+            const dataVencimento = new Date(conta.vencimento);
+            dataVencimento.setMonth(dataVencimento.getMonth() + 1); // Aumenta um mês no vencimento
+            conta.vencimento = dataVencimento.toISOString().split('T')[0];
         } 
+
         if (conta.parcelasPagas === conta.parcelas) {
             conta.pago = true;
         }
+
         localStorage.setItem("contas", JSON.stringify(contas));
         atualizarCartoes();
     }
