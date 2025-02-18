@@ -225,38 +225,23 @@ footer {
 
 /* Responsividade para dispositivos móveis */
 @media (max-width: 768px) {
-    /* Modal */
-    .modal-content {
-        width: 80%; /* Ajusta o modal para ocupar mais largura na tela */
-        padding: 20px;
-    }
-
-    /* Card */
     .card {
-        width: 100%; /* Faz o card ocupar 100% da largura disponível */
-        margin-bottom: 20px;
+        width: 100%; /* Certifique-se de que o cartão ocupa 100% da largura da tela */
+        padding: 15px; /* Aumente o padding para espaçar os itens corretamente */
+        font-size: 16px; /* Ajuste o tamanho da fonte para o mobile */
+        box-sizing: border-box; /* Garantir que o padding não ultrapasse a largura do cartão */
     }
 
-    /* Botões no card */
-    .card button {
-        width: 100%;
-        font-size: 14px;
+    .card p {
+        margin-bottom: 12px; /* Dê um pequeno espaçamento entre os parágrafos */
+        overflow-wrap: break-word; /* Permitir que o texto quebre a linha, evitando que se sobreponha */
     }
 
-    /* Footer */
-    footer {
-        flex-direction: column;
-        padding: 15px;
-    }
-
-    .footer__logos {
-        padding-right: 0;
-        justify-content: center;
-        margin-top: 10px;
-    }
-
-    .footer__autor {
-        margin-bottom: 10px;
+    /* Ajuste de largura dos botões para o mobile */
+    .acoes button {
+        width: 100%; /* Botões podem ocupar a largura total */
+        margin-bottom: 10px; /* Espaçamento entre os botões */
     }
 }
+
 
