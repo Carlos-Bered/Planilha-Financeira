@@ -14,8 +14,9 @@ function atualizarCartoes() {
     contas.forEach((conta, index) => {
         const novoCartao = document.createElement("div");
         novoCartao.classList.add("card");
-        const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
-
+        
+        const valorRestante = (conta.valor - (conta.parcelasPagas * conta.valorParcela)).toFixed(2);
+        
         // Calcular a data da última parcela fixa
         const ultimaParcela = calcularUltimaParcela(conta.vencimento, conta.parcelas);
 
@@ -24,7 +25,7 @@ function atualizarCartoes() {
             `<h3>${conta.nome}</h3>
             <p>Vencimento: ${formatarData(conta.vencimento)}</p>
             <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
-            <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valor / conta.parcelas).toFixed(2)}</p>
+            <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valorParcela).toFixed(2)}</p>
             <p>Parcelas: ${conta.parcelas}</p>
             <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
             <p>Valor Restante: R$ ${valorRestante}</p>
@@ -38,14 +39,14 @@ function atualizarCartoes() {
     });
 }
 
-// Função para calcular a data da última parcela
+// Função para calcular a última parcela
 function calcularUltimaParcela(vencimento, parcelas) {
     const dataVencimento = new Date(vencimento);
     dataVencimento.setMonth(dataVencimento.getMonth() + parcelas - 1); // A última parcela será o vencimento + número de parcelas - 1
     return formatarData(dataVencimento.toISOString().split('T')[0]);
 }
 
-// Formatar data
+// Função para formatar a data
 function formatarData(data) {
     const [ano, mes, dia] = data.split("-");
     return `${dia}/${mes}/${ano}`;
@@ -130,6 +131,9 @@ formConta.addEventListener("submit", (event) => {
         return;
     }
 
+    // Calcular o valor de cada parcela
+    const valorParcela = (valor / parcelas).toFixed(2);
+
     if (contaEditandoIndex !== null) {
         // Editar conta
         contas[contaEditandoIndex] = {
@@ -139,6 +143,7 @@ formConta.addEventListener("submit", (event) => {
             parcelas: parcelas,
             parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
             pago: contas[contaEditandoIndex].pago || false,
+            valorParcela: valorParcela // Valor fixo de cada parcela
         };
     } else {
         // Adicionar nova conta
@@ -149,6 +154,7 @@ formConta.addEventListener("submit", (event) => {
             parcelas: parcelas,
             parcelasPagas: 0,
             pago: false,
+            valorParcela: valorParcela // Valor fixo de cada parcela
         });
     }
 
