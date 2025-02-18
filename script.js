@@ -21,10 +21,10 @@ function atualizarCartoes() {
             `<h3>${conta.nome}</h3>
             <p>Vencimento: ${formatarData(conta.vencimento)}</p>
             <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
-            <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valorParcela).toFixed(2)}</p> <!-- Correção aqui -->
-            <p>Parcelas: ${conta.parcelas}</p>
-            <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
             <p>Valor Restante: R$ ${valorRestante}</p>
+            <p>Parcelas: ${conta.parcelas}</p>
+            <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valorParcela).toFixed(2)}</p> <!-- Correção aqui -->
+            <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
             <div class="acoes">
                 <button class="pagar" onclick="confirmarPagamento(${index})">${conta.pago ? 'Pago' : 'Pagar'}</button>
                 <button class="deletar" onclick="deletarConta(${index})">Deletar</button>
