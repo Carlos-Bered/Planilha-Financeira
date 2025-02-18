@@ -29,7 +29,9 @@ function atualizarCartoes() {
 
         // Data de vencimento permanece fixa (sem alteração no dia)
         const dataVencimento = new Date(conta.vencimento);
-        const ultimaParcela = new Date(dataVencimento);
+        dataVencimento.setMonth(dataVencimento.getMonth() + 1); // Avança o mês
+        dataVencimento.setDate(new Date(conta.vencimento).getDate()); // Garantir que o dia permaneça fixo
+        conta.vencimento = dataVencimento.toISOString().split('T')[0];
         
         // Calcular a última parcela com base nas parcelas
         ultimaParcela.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // Avança os meses
