@@ -22,27 +22,36 @@ function atualizarCartoes() {
         const novoCartao = document.createElement("div");
         novoCartao.classList.add("card");
 
-                const valorParcela = conta.valor / conta.parcelas;
+        const valorParcela = conta.valor / conta.parcelas;
+        const valorRestante = conta.valor - (conta.parcelasPagas * valorParcela);
 
-                const valorRestante = conta.valor - (conta.parcelasPagas * valorParcela);
-
-                const dataVencimento = new Date(conta.vencimento);
+        const dataVencimento = new Date(conta.vencimento);
         dataVencimento.setMonth(dataVencimento.getMonth() + conta.parcelasPagas);
 
         if (dataVencimento.getDate() !== new Date(conta.vencimento).getDate()) {
             dataVencimento.setDate(0); // Volta para o último dia do mês
         }
 
-        const vencimentoFormatado = formatarData(dataVencimento.toISOString().split('T')[0]);
+        let vencimentoFormatado = "Data inválida";
+        if (!isNaN(dataVencimento.getTime())) {
+            vencimentoFormatado = formatarData(dataVencimento.toISOString().split('T')[0]);
+        } else {
+            console.error("Data de vencimento inválida:", conta.vencimento);
+        }
 
-              const ultimaParcela = new Date(conta.vencimento);
+        const ultimaParcela = new Date(conta.vencimento);
         ultimaParcela.setMonth(ultimaParcela.getMonth() + conta.parcelas - 1);
 
-               if (ultimaParcela.getDate() !== new Date(conta.vencimento).getDate()) {
+        if (ultimaParcela.getDate() !== new Date(conta.vencimento).getDate()) {
             ultimaParcela.setDate(0);
         }
 
-        const ultimaParcelaFormatada = formatarData(ultimaParcela.toISOString().split('T')[0]);
+        let ultimaParcelaFormatada = "Data inválida";
+        if (!isNaN(ultimaParcela.getTime())) {
+            ultimaParcelaFormatada = formatarData(ultimaParcela.toISOString().split('T')[0]);
+        } else {
+            console.error("Última parcela inválida:", conta.vencimento);
+        }
 
         novoCartao.innerHTML = 
             `<h3>${conta.nome}</h3>
@@ -127,7 +136,6 @@ formConta.addEventListener("submit", (event) => {
     }
 
     if (contaEditandoIndex !== null) {
-        
         contas[contaEditandoIndex] = {
             nome: nomeConta,
             vencimento: dataVencimento,
@@ -137,7 +145,6 @@ formConta.addEventListener("submit", (event) => {
             pago: contas[contaEditandoIndex].pago || false,
         };
     } else {
-        
         contas.push({
             nome: nomeConta,
             vencimento: dataVencimento,
@@ -148,11 +155,10 @@ formConta.addEventListener("submit", (event) => {
         });
     }
 
-    
     localStorage.setItem("contas", JSON.stringify(contas));
     atualizarCartoes();
     modal.style.display = "none";  
     formConta.reset();
 });
 
-atualizarCartoes(); 
+atualizarCartoes();
