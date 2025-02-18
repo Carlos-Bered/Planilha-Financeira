@@ -121,6 +121,8 @@ formConta.addEventListener("submit", (event) => {
         return;
     }
 
+    const valorParcela = valor / parcelas;  // Cálculo do valor de cada parcela
+
     if (contaEditandoIndex !== null) {
         // Editar conta
         contas[contaEditandoIndex] = {
@@ -128,6 +130,7 @@ formConta.addEventListener("submit", (event) => {
             vencimento: dataVencimento,
             valor: valor,
             parcelas: parcelas,
+            valorParcela: valorParcela, // Salvar o valor da parcela
             parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
             pago: contas[contaEditandoIndex].pago || false,
         };
@@ -138,6 +141,7 @@ formConta.addEventListener("submit", (event) => {
             vencimento: dataVencimento,
             valor: valor,
             parcelas: parcelas,
+            valorParcela: valorParcela, // Salvar o valor da parcela
             parcelasPagas: 0,
             pago: false,
         });
