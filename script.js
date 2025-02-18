@@ -16,15 +16,21 @@ function atualizarCartoes() {
         novoCartao.classList.add("card");
         const valorRestante = (conta.valor - (conta.parcelasPagas * (conta.valor / conta.parcelas))).toFixed(2);
         
+        // Calcular a data da última parcela
+        const dataVencimento = new Date(conta.vencimento);
+        dataVencimento.setMonth(dataVencimento.getMonth() + conta.parcelas - 1); // Adiciona o número de parcelas - 1
+        const ultimaParcela = formatarData(dataVencimento.toISOString().split('T')[0]); // Formatar data da última parcela
+
         // Formatação da data
         novoCartao.innerHTML = 
             `<h3>${conta.nome}</h3>
             <p>Vencimento: ${formatarData(conta.vencimento)}</p>
             <p>Valor Total: R$ ${parseFloat(conta.valor).toFixed(2)}</p>
-            <p>Valor Restante: R$ ${valorRestante}</p>
+            <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valorParcela).toFixed(2)}</p>
             <p>Parcelas: ${conta.parcelas}</p>
-            <p>Valor de Cada Parcela: R$ ${parseFloat(conta.valorParcela).toFixed(2)}</p> <!-- Correção aqui -->
             <p>Parcelas Pagas: ${conta.parcelasPagas}</p>
+            <p>Valor Restante: R$ ${valorRestante}</p>
+            <p>Última Parcela: ${ultimaParcela}</p> <!-- Data da última parcela -->
             <div class="acoes">
                 <button class="pagar" onclick="confirmarPagamento(${index})">${conta.pago ? 'Pago' : 'Pagar'}</button>
                 <button class="deletar" onclick="deletarConta(${index})">Deletar</button>
@@ -115,8 +121,6 @@ formConta.addEventListener("submit", (event) => {
         return;
     }
 
-    const valorParcela = valor / parcelas; // Calcular o valor de cada parcela
-
     if (contaEditandoIndex !== null) {
         // Editar conta
         contas[contaEditandoIndex] = {
@@ -124,7 +128,6 @@ formConta.addEventListener("submit", (event) => {
             vencimento: dataVencimento,
             valor: valor,
             parcelas: parcelas,
-            valorParcela: valorParcela, // Adicionar o valor da parcela
             parcelasPagas: contas[contaEditandoIndex].parcelasPagas || 0,
             pago: contas[contaEditandoIndex].pago || false,
         };
@@ -135,7 +138,6 @@ formConta.addEventListener("submit", (event) => {
             vencimento: dataVencimento,
             valor: valor,
             parcelas: parcelas,
-            valorParcela: valorParcela, // Adicionar o valor da parcela
             parcelasPagas: 0,
             pago: false,
         });
